@@ -2,7 +2,6 @@ import { db } from '@/lib/db';
 import { hash } from 'bcrypt';
 import { z } from 'zod';
 import { NextResponse } from 'next/server';
-import { use } from 'react';
 
 const userRegistrationSchema = z.object({
   username: z
