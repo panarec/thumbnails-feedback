@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/components/ui/use-toast';
+import { useState } from 'react';
 
 const FormSchema = z.object({
   username: z.string().min(2, {
@@ -24,6 +25,7 @@ const FormSchema = z.object({
 const SignInForm = () => {
   const router = useRouter();
   const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -33,11 +35,13 @@ const SignInForm = () => {
   });
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+    setIsSubmitting(true);
     const signedIn = await signIn('credentials', {
       username: data.username,
       password: data.password,
       redirect: false,
     });
+    setIsSubmitting(false);
     if (signedIn?.status !== 200) {
       toast({
         title: 'Error',
@@ -81,9 +85,11 @@ const SignInForm = () => {
             )}
           />
         </div>
-        <Button type="submit" className="w-full">
-          Sign in
-        </Button>
+        {
+          <Button type="submit" className="w-full" disabled={isSubmitting}>
+            {isSubmitting ? 'Signing in...' : 'Sign in'}
+          </Button>
+        }
         <p className="text-center text-sm text-gray-600 mt-2">
           Don&apos;t have an account?&nbsp;
           <Link href="/sign-up" className="text-blue-500 hover:underline">
