@@ -1,23 +1,38 @@
 'use client';
 
-import { useState } from 'react';
-import { FileInput } from './ui/file-input';
+import { FC } from 'react';
+import { FileInput } from '@/components/ui/file-input';
+import { Input } from '@/components/ui/input';
+import { TypographyH3 } from '@/components/ui/h3';
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 
-const TestUploadSection = () => {
-  const [videoName, setVideoName] = useState('Example video name'.split(' ').join(''));
+interface TestUploadSectionProps {
+  id: string;
+  form: any;
+  videoName: string;
+  index: number;
+}
+
+const TestUploadSection: FC<TestUploadSectionProps> = ({ id, form, videoName, index }) => {
   return (
-    <div>
-      <FileInput />
-      <div>
-        <input
-          type="text"
-          name="video-name"
-          id="video-name"
-          value={videoName}
-          onChange={(e) => setVideoName(e.target.value)}
-          className="mt-1 block w-full px-3 py-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-        />
+    <div className="flex flex-col gap-3">
+      <div className="flex justify-center">
+        <TypographyH3>{id}</TypographyH3>
       </div>
+      <FileInput />
+      <FormField
+        control={form.control}
+        name={`testItems.${index}.videoName`}
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Video title:</FormLabel>
+            <FormControl>
+              <Input type="text" placeholder="Video title for this thumbnail" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
     </div>
   );
 };

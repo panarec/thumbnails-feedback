@@ -1,4 +1,5 @@
 import TestUploadSection from '@/components/TestUploadSection';
+import NewTestForm from '@/components/form/NewTestForm';
 import { authOptions } from '@/lib/auth';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
@@ -11,10 +12,7 @@ const NewTestPage = async () => {
   }
   return (
     <div>
-      <div className="grid grid-cols-2 gap-3">
-        <TestUploadSection />
-        <TestUploadSection />
-      </div>
+      <NewTestForm />
     </div>
   );
 };
