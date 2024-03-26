@@ -8,6 +8,7 @@ import Image from 'next/image';
 import { AspectRatio } from './aspect-ratio';
 import { FormControl, FormField, FormItem, FormLabel } from './form';
 import { useFormContext } from 'react-hook-form';
+import { MAX_FILE_SIZE } from '@/config/image';
 
 interface FileWithUrl {
   name: string;
@@ -26,7 +27,7 @@ const FileInput = forwardRef<HTMLInputElement, InputProps>(({ className, ...prop
   const [dragActive, setDragActive] = useState<boolean>(false);
   const [preview, setPreview] = useState<string>();
   const [selectedFile, setSelectedFile] = useState<File>();
-  const { formState, setValue, control } = useFormContext();
+  const { formState, setValue, control, resetField } = useFormContext();
 
   const noInput = !preview;
 
@@ -52,6 +53,7 @@ const FileInput = forwardRef<HTMLInputElement, InputProps>(({ className, ...prop
           description: 'Please upload a valid file type.',
           variant: 'destructive',
         });
+
         return;
       }
       const onlyOneFile = e.target.files.length === 1;
@@ -61,6 +63,16 @@ const FileInput = forwardRef<HTMLInputElement, InputProps>(({ className, ...prop
           description: 'Please upload only one file.',
           variant: 'destructive',
         });
+
+        return;
+      }
+      if (e.target.files[0].size > MAX_FILE_SIZE) {
+        toast({
+          title: 'File too large',
+          description: 'Please upload a file smaller than 2MB.',
+          variant: 'destructive',
+        });
+        resetField(`testItems.${props.index}.file`);
         return;
       }
       setValue(`testItems.${props.index}.file`, e.target.files[0]);
@@ -92,6 +104,14 @@ const FileInput = forwardRef<HTMLInputElement, InputProps>(({ className, ...prop
         toast({
           title: 'Invalid file count',
           description: 'Please upload only one file.',
+          variant: 'destructive',
+        });
+        return;
+      }
+      if (files[0].size > MAX_FILE_SIZE) {
+        toast({
+          title: 'File too large',
+          description: 'Please upload a file smaller than 2MB.',
           variant: 'destructive',
         });
         return;

@@ -120,7 +120,7 @@ const NewTestForm = () => {
               name="videoDescription"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Video description:</FormLabel>
+                  <FormLabel>Video description &#40;optional&#41;:</FormLabel>
                   <FormControl>
                     <Textarea placeholder="Describe content of this video" {...field} />
                   </FormControl>
