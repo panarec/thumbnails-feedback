@@ -1,7 +1,6 @@
 'use client';
 
 import { z } from 'zod';
-import TestUploadSection from '../TestUploadSection';
 import { Input } from '@/components/ui/input';
 
 import { Textarea } from '@/components/ui/textarea';
@@ -9,11 +8,10 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
-import { TypographyH3 } from '../ui/h3';
-import { FileInput } from '../ui/file-input';
-import { useEffect, useState } from 'react';
+import ImageUpload from '../ui/image-upload';
+import { useS3Upload } from '@/hooks/use-s3-upload';
 
-const formSchema = z.object({
+export const formSchema = z.object({
   testName: z.string().min(1).max(100),
   testDuration: z.coerce.number().int().positive(),
   videoDescription: z.string().max(300).optional(),
@@ -21,6 +19,8 @@ const formSchema = z.object({
     z.object({
       id: z.string(),
       videoName: z.string(),
+      fileName: z.string(),
+      file: z.any().nullable(),
     })
   ),
 });
@@ -29,14 +29,19 @@ const testItems = [
   {
     id: 'A.',
     videoName: '',
+    fileName: '',
+    file: '',
   },
   {
     id: 'B.',
     videoName: '',
+    fileName: '',
+    file: '',
   },
 ];
 
 const NewTestForm = () => {
+  const { s3Upload } = useS3Upload();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -48,7 +53,32 @@ const NewTestForm = () => {
   });
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    console.log(data);
+    try {
+      const filesUploadPromise = data.testItems.map(async (item) => {
+        const { error, getUrl } = await s3Upload(item.file);
+
+        if (error) {
+          return;
+        }
+
+        item.file = getUrl;
+      });
+
+      await Promise.all(filesUploadPromise);
+
+      fetch('/api/test', {
+        method: 'POST',
+        body: JSON.stringify({
+          ...data,
+          testItems: data.testItems.map((item) => ({
+            videoName: item.videoName,
+            file: item.file,
+          })),
+        }),
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -82,25 +112,7 @@ const NewTestForm = () => {
             )}
           />
           {testItems.map((item, index) => (
-            <div className="flex flex-col gap-3" key={item.id}>
-              <div className="flex justify-center">
-                <TypographyH3>{item.id}</TypographyH3>
-              </div>
-              <FileInput id={item.id} />
-              <FormField
-                control={form.control}
-                name={`testItems.${index}.videoName`}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Video title:</FormLabel>
-                    <FormControl>
-                      <Input type="text" placeholder="Video title for this thumbnail" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            <ImageUpload id={item.id} index={index} key={index} />
           ))}
           <div className="col-span-2">
             <FormField
@@ -118,9 +130,12 @@ const NewTestForm = () => {
             />
           </div>
         </div>
-        <div>
-          <Button type="submit" className="my-5">
-            Create test
+        <div className="flex flex-row gap-3">
+          <Button type="submit" className="my-5" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting ? 'Creating...' : 'Create'}
+          </Button>
+          <Button type="button" className="my-5 bg-red-500"  onClick={() => form.reset()}>
+            Discard
           </Button>
         </div>
       </form>

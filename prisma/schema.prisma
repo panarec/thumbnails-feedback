@@ -30,7 +30,7 @@ model Test {
   id        String   @id @default(uuid())
   test_name      String
   test_duration  Int
-  video_description String
+  video_description String?
   userId   String
   user     User     @relation(fields: [userId], references: [id])
   thumbnails Thumbnail[]

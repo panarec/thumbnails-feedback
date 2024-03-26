@@ -1,30 +1,56 @@
-import { put } from '@vercel/blob';
+import { fileTypeSchema } from '@/lib/validations/s3';
 import { NextResponse } from 'next/server';
+import { z } from 'zod';
+import { nanoid } from 'nanoid';
+import { createPresignedPost } from '@aws-sdk/s3-presigned-post';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { GetObjectCommand } from '@aws-sdk/client-s3';
+import { s3 } from '@/lib/s3';
+import { MAX_FILE_SIZE } from '@/config/image';
+import { S3_BUCKET_NAME } from '@/config/s3';
+import { NextApiRequest } from 'next';
 
-export async function POST(request: Request): Promise<NextResponse> {
-  const { searchParams } = new URL(request.url);
-  const filename = searchParams.get('filename') || '';
-
-  if (!filename || request.body === null) {
-    return NextResponse.json({ error: 'Filename is required' });
+export async function POST(req: Request): Promise<NextResponse> {
+  if (!req.body) {
+    return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
   }
+  const reqFileType = (await req.json()).fileType;
+  const fileId = nanoid();
 
-  // ⚠️ The below code is for App Router Route Handlers only
-  const blob = await put(filename, request.body, {
-    access: 'public',
-  });
+  try {
+    // validate file extension, will throw if invalid
+    const fileType = fileTypeSchema.parse(reqFileType);
+    const fileExtension = fileType.split('/')[1];
+    const key = `${fileId}.${fileExtension}`;
 
-  // Here's the code for Pages API Routes:
-  // const blob = await put(filename, request, {
-  //   access: 'public',
-  // });
+    // Create a presigned POST request to upload the file to S3
+    const { url: postUrl, fields } = (await createPresignedPost(s3, {
+      Bucket: S3_BUCKET_NAME,
+      Key: key,
+      Expires: 60,
+      Conditions: [
+        ['content-length-range', 0, MAX_FILE_SIZE],
+        ['starts-with', '$Content-Type', 'image/'],
+      ],
+    })) as { url: string; fields: any };
 
-  return NextResponse.json(blob);
+    const command = new GetObjectCommand({
+      Bucket: S3_BUCKET_NAME,
+      Key: key,
+    });
+
+    const getUrl = await getSignedUrl(s3, command);
+
+    return NextResponse.json({ postUrl, fields, getUrl }, { status: 200 });
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json({ error: error.issues }, { status: 415 });
+    }
+
+    if (error instanceof Error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    return NextResponse.json({ error: 'Something went wrong' }, { status: 500 });
+  }
 }
-
-// The next lines are required for Pages API Routes only
-// export const config = {
-//   api: {
-//     bodyParser: false,
-//   },
-// };

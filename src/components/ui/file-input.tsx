@@ -1,17 +1,15 @@
 'use client';
 
 import { forwardRef, useReducer, useState, type ChangeEvent, type DragEvent, useEffect } from 'react';
-// import { useToast } from '@/src/hooks/use-toast';
-// import ImageUpload from '@/ui/image-upload';
-
-// import { MAX_FILE_SIZE } from '@/config/image';
 import { cn, validateFileType } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { UploadIcon } from '@radix-ui/react-icons';
 import Image from 'next/image';
 import { AspectRatio } from './aspect-ratio';
 import { set } from 'zod';
-// import { Icons } from '../icons';
+import { FormControl, FormField, FormItem, FormLabel } from './form';
+import { PutBlobResult } from '@vercel/blob';
+import { useFormContext } from 'react-hook-form';
 
 interface FileWithUrl {
   name: string;
@@ -20,40 +18,17 @@ interface FileWithUrl {
   error?: boolean | undefined;
 }
 
-// Reducer action(s)
-const addFilesToInput = () => ({
-  type: 'ADD_FILES_TO_INPUT' as const,
-  payload: [] as FileWithUrl[],
-});
-
-type Action = ReturnType<typeof addFilesToInput>;
-type State = FileWithUrl[];
-
-export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {}
+export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {
+  control?: any;
+  index?: number;
+}
 
 const FileInput = forwardRef<HTMLInputElement, InputProps>(({ className, ...props }, ref) => {
   const { toast } = useToast();
   const [dragActive, setDragActive] = useState<boolean>(false);
   const [preview, setPreview] = useState<string>();
   const [selectedFile, setSelectedFile] = useState<File>();
-  const [input, dispatch] = useReducer((state: State, action: Action) => {
-    switch (action.type) {
-      case 'ADD_FILES_TO_INPUT': {
-        // do not allow more than 5 files to be uploaded at once
-        if (state.length + action.payload.length > 10) {
-          //   toast({
-          //     title: 'Too many files',
-          //     description: 'You can only upload a maximum of 5 files at a time.',
-          //   });
-          return state;
-        }
-
-        return [...state, ...action.payload];
-      }
-
-      // You could extend this, for example to allow removing files
-    }
-  }, []);
+  const { formState, setValue, control } = useFormContext();
 
   const noInput = !preview;
 
@@ -80,6 +55,16 @@ const FileInput = forwardRef<HTMLInputElement, InputProps>(({ className, ...prop
         });
         return;
       }
+      const onlyOneFile = e.target.files.length === 1;
+      if (!onlyOneFile) {
+        toast({
+          title: 'Invalid file count',
+          description: 'Please upload only one file.',
+        });
+        return;
+      }
+      setValue(`testItems.${props.index}.file`, e.target.files[0]);
+
       setSelectedFile(e.target.files[0]);
     }
   };
@@ -98,6 +83,15 @@ const FileInput = forwardRef<HTMLInputElement, InputProps>(({ className, ...prop
           title: 'Invalid file type',
           description: 'Only image files are allowed.',
         });
+        return;
+      }
+      const onlyOneFile = e.dataTransfer.files.length === 1;
+      if (!onlyOneFile) {
+        toast({
+          title: 'Invalid file count',
+          description: 'Please upload only one file.',
+        });
+        return;
       }
 
       if (!e.dataTransfer.files || e.dataTransfer.files.length === 0) {
@@ -160,15 +154,24 @@ const FileInput = forwardRef<HTMLInputElement, InputProps>(({ className, ...prop
               <span className="font-semibold text-red-600"> drag and drop</span> to upload image
             </p>
 
-            <input
-              {...props}
-              ref={ref}
-              multiple
-              onChange={handleChange}
-              accept="image/jpeg, image/jpg, image/png"
-              id={props.id}
-              type="file"
-              className="hidden"
+            <FormField
+              control={control}
+              name={`testItems.${props.index}.file`}
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <input
+                      {...props}
+                      ref={ref}
+                      onChange={handleChange}
+                      accept="image/jpeg, image/jpg, image/png"
+                      id={props.id}
+                      type="file"
+                      className="hidden"
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
             />
           </>
         ) : (
