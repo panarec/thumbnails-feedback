@@ -1,14 +1,12 @@
 'use client';
 
-import { forwardRef, useReducer, useState, type ChangeEvent, type DragEvent, useEffect } from 'react';
+import { forwardRef, useState, type ChangeEvent, type DragEvent, useEffect } from 'react';
 import { cn, validateFileType } from '@/lib/utils';
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from '@/components/ui/use-toast';
 import { UploadIcon } from '@radix-ui/react-icons';
 import Image from 'next/image';
 import { AspectRatio } from './aspect-ratio';
-import { set } from 'zod';
 import { FormControl, FormField, FormItem, FormLabel } from './form';
-import { PutBlobResult } from '@vercel/blob';
 import { useFormContext } from 'react-hook-form';
 
 interface FileWithUrl {
@@ -52,6 +50,7 @@ const FileInput = forwardRef<HTMLInputElement, InputProps>(({ className, ...prop
         toast({
           title: 'Invalid file type',
           description: 'Please upload a valid file type.',
+          variant: 'destructive',
         });
         return;
       }
@@ -60,6 +59,7 @@ const FileInput = forwardRef<HTMLInputElement, InputProps>(({ className, ...prop
         toast({
           title: 'Invalid file count',
           description: 'Please upload only one file.',
+          variant: 'destructive',
         });
         return;
       }
@@ -73,15 +73,17 @@ const FileInput = forwardRef<HTMLInputElement, InputProps>(({ className, ...prop
   const handleDrop = async (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log(e.dataTransfer);
+    setDragActive(false);
+
     // validate file type
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       const files = Array.from(e.dataTransfer.files);
       const validFiles = files.filter((file) => validateFileType(file));
-      if (files.length !== validFiles.length) {
+      if (validFiles.length === 0) {
         toast({
           title: 'Invalid file type',
           description: 'Only image files are allowed.',
+          variant: 'destructive',
         });
         return;
       }
@@ -90,6 +92,7 @@ const FileInput = forwardRef<HTMLInputElement, InputProps>(({ className, ...prop
         toast({
           title: 'Invalid file count',
           description: 'Please upload only one file.',
+          variant: 'destructive',
         });
         return;
       }
@@ -99,8 +102,6 @@ const FileInput = forwardRef<HTMLInputElement, InputProps>(({ className, ...prop
         return;
       }
       setSelectedFile(e.dataTransfer.files[0]);
-
-      setDragActive(false);
 
       e.dataTransfer.clearData();
     }

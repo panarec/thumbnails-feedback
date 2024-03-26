@@ -20,7 +20,7 @@ export const formSchema = z.object({
       id: z.string(),
       videoName: z.string(),
       fileName: z.string(),
-      file: z.any().nullable(),
+      file: z.any(),
     })
   ),
 });
@@ -134,7 +134,7 @@ const NewTestForm = () => {
           <Button type="submit" className="my-5" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting ? 'Creating...' : 'Create'}
           </Button>
-          <Button type="button" className="my-5 bg-red-500"  onClick={() => form.reset()}>
+          <Button type="button" className="my-5 bg-red-500" onClick={() => form.reset()}>
             Discard
           </Button>
         </div>

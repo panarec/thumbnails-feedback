@@ -1,5 +1,5 @@
 import { MAX_FILE_SIZE } from '@/config/image';
-import { toast } from '@/hooks/use-toast';
+import { toast } from '@/components/ui/use-toast';
 import { FileTooLargeError } from '@/lib/exceptions';
 
 import { s3ResponseSchema } from '@/lib/validations/s3';
