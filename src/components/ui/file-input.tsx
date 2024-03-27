@@ -6,7 +6,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { UploadIcon } from '@radix-ui/react-icons';
 import Image from 'next/image';
 import { AspectRatio } from './aspect-ratio';
-import { FormControl, FormField, FormItem, FormLabel } from './form';
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from './form';
 import { useFormContext } from 'react-hook-form';
 import { MAX_FILE_SIZE } from '@/config/image';
 
@@ -171,8 +171,8 @@ const FileInput = forwardRef<HTMLInputElement, InputProps>(({ className, ...prop
             <UploadIcon className="w-10 h-10" />
 
             <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-              <span className="font-semibold text-red-600">Click</span> or
-              <span className="font-semibold text-red-600"> drag and drop</span> to upload image
+              <span className="font-semibold text-secondary">Click</span> or
+              <span className="font-semibold text-secondary"> drag and drop</span> to upload image
             </p>
 
             <FormField
@@ -191,6 +191,7 @@ const FileInput = forwardRef<HTMLInputElement, InputProps>(({ className, ...prop
                       className="hidden"
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />

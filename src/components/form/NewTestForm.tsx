@@ -12,15 +12,15 @@ import ImageUpload from '../ui/image-upload';
 import { useS3Upload } from '@/hooks/use-s3-upload';
 
 export const formSchema = z.object({
-  testName: z.string().min(1).max(100),
+  testName: z.string().min(3, 'Test name must contain at least 3 character(s)').max(100),
   testDuration: z.coerce.number().int().positive(),
   videoDescription: z.string().max(300).optional(),
   testItems: z.array(
     z.object({
       id: z.string(),
-      videoName: z.string(),
+      videoName: z.string().min(3, 'Video name must contain at least 3 character(s)').max(100),
       fileName: z.string(),
-      file: z.any(),
+      file: z.any().refine((files) => files?.length > 1, 'Image is required.'),
     })
   ),
 });
@@ -46,7 +46,7 @@ const NewTestForm = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       testName: '',
-      testDuration: 1,
+      testDuration: 7,
       videoDescription: '',
       testItems: testItems,
     },
@@ -131,10 +131,10 @@ const NewTestForm = () => {
           </div>
         </div>
         <div className="flex flex-row gap-3">
-          <Button type="submit" className="my-5" disabled={form.formState.isSubmitting}>
+          <Button type="submit" className="my-5 bg-primary" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting ? 'Creating...' : 'Create'}
           </Button>
-          <Button type="button" className="my-5 bg-red-500" onClick={() => form.reset()}>
+          <Button type="button" className="my-5" variant="outline" onClick={() => form.reset()}>
             Discard
           </Button>
         </div>

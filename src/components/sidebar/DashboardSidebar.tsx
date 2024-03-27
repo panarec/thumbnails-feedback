@@ -12,7 +12,7 @@ const DasboardSidebar = () => {
       <ul className="min-w-40">
         {sidebarMenu.map((item, index) => (
           <li key={index} className="my-4 pr-10 flex flex-row items-center">
-            {item.icon && <item.icon className="w-5 h-5 mr-2" color="red" />}
+            {item.icon && <item.icon className="w-5 h-5 mr-2 text-primary" />}
             <Link href={item.href}>{item.label}</Link>
           </li>
         ))}
