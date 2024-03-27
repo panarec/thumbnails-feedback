@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.className} min-h-screen bg-white text-slate-900 antialiased dark:bg-slate-900 dark:text-slate-50`}
+        className={`${inter.className} h-[calc(100vh - 200px)] bg-white text-slate-900 antialiased dark:bg-slate-900 dark:text-slate-50`}
       >
         <Navbar />
         <main className="h-screen flex flex-col container">{children}</main>

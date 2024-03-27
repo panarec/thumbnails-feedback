@@ -6,8 +6,8 @@ interface LayoutProps {
 
 const Layout: FC<LayoutProps> = ({ children }) => {
   return (
-    <div>
-      <main className='p-10 bg-slate-200 rounded-md'>{children}</main>
+    <div className='flex items-center justify-center m-auto'>
+      <main className='p-10 bg-blue-50 rounded-md'>{children}</main>
     </div>
   );
 };

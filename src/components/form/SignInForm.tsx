@@ -60,7 +60,7 @@ const SignInForm = () => {
             name="username"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>E-mail</FormLabel>
+                <FormLabel>Username</FormLabel>
                 <FormControl>
                   <Input placeholder="Your username" {...field} />
                 </FormControl>

@@ -6,7 +6,7 @@ import { Button } from './ui/button';
 const UserAccountNav = () => {
   return (
     <Button
-      variant="destructive"
+      className='bg-transparent border border-primary text-primary px-4 py-2 rounded-md hover:bg-primary/90 hover:text-primary-foreground'
       onClick={() =>
         signOut({
           redirect: true,

@@ -8,7 +8,7 @@ const sidebarMenu = [
 ];
 const DasboardSidebar = () => {
   return (
-    <div className="p-10 bg-gray-50 rounded-xl drop-shadow-sm mr-5 sticky top-10">
+    <div className="p-10 rounded-xl drop-shadow-sm bg-blue-50 mr-5 sticky top-10">
       <ul className="min-w-40">
         {sidebarMenu.map((item, index) => (
           <li key={index} className="my-4 pr-10 flex flex-row items-center">
