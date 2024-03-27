@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { SiteConfig } from '@/config/site';
+import GradientShape from './graphics/GradientShape';
 
 interface MainNavProps {
   siteConfig?: SiteConfig;
