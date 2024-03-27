@@ -10,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import ImageUpload from '../ui/image-upload';
 import { useS3Upload } from '@/hooks/use-s3-upload';
+import Link from 'next/link';
 
 export const formSchema = z.object({
   testName: z.string().min(3, 'Test name must contain at least 3 character(s)').max(100),
@@ -20,7 +21,7 @@ export const formSchema = z.object({
       id: z.string(),
       videoName: z.string().min(3, 'Video name must contain at least 3 character(s)').max(100),
       fileName: z.string(),
-      file: z.any().refine((files) => files?.length > 1, 'Image is required.'),
+      file: z.any().refine((files) => !!files, 'Image is required.'),
     })
   ),
 });
@@ -58,7 +59,7 @@ const NewTestForm = () => {
         const { error, getUrl } = await s3Upload(item.file);
 
         if (error) {
-          return;
+          throw new Error('Failed to upload file');
         }
 
         item.file = getUrl;
@@ -77,9 +78,28 @@ const NewTestForm = () => {
         }),
       });
     } catch (error) {
-      console.error(error);
+      throw new Error('Failed to create test');
     }
   };
+
+  if (form.formState.isSubmitSuccessful) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full">
+        <h1 className="text-2xl font-bold text-center">Test created successfully!</h1>
+        <p className="text-lg text-center">You can now add more tests or review existing ones.</p>
+        <div className="flex flex-row gap-3">
+          <Button className="mt-5" onClick={() => form.reset()}>
+            Create another test
+          </Button>
+          <Link href="/dashboard">
+            <Button className="mt-5" variant="outline">
+              Go to dashboard
+            </Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <Form {...form}>
@@ -134,7 +154,13 @@ const NewTestForm = () => {
           <Button type="submit" className="my-5 bg-primary" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting ? 'Creating...' : 'Create'}
           </Button>
-          <Button type="button" className="my-5" variant="outline" onClick={() => form.reset()}>
+          <Button
+            type="button"
+            className="my-5"
+            variant="outline"
+            onClick={() => form.reset()}
+            disabled={form.formState.isSubmitting}
+          >
             Discard
           </Button>
         </div>

@@ -172,7 +172,7 @@ const FileInput = forwardRef<HTMLInputElement, InputProps>(({ className, ...prop
 
             <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
               <span className="font-semibold text-secondary">Click</span> or
-              <span className="font-semibold text-secondary"> drag and drop</span> to upload image
+              <span className="font-semibold text-secondary"> drag and drop</span> to upload image &#40;2MB&#41;
             </p>
 
             <FormField
