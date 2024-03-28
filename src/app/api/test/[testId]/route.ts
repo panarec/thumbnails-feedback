@@ -1,15 +1,17 @@
 import { authOptions } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { Prisma, Test } from '@prisma/client';
+import { NextApiRequest } from 'next';
 import { getServerSession } from 'next-auth';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-const TestWithCommentsIdsAndVotesIds = Prisma.validator<Prisma.TestDefaultArgs>()({
+const TestWithCommentsAndVotes = Prisma.validator<Prisma.TestDefaultArgs>()({
   include: {
     thumbnails: {
       select: {
         id: true,
         thumbnail_url: true,
+        title: true,
         votes: {
           select: {
             id: true,
@@ -17,6 +19,8 @@ const TestWithCommentsIdsAndVotesIds = Prisma.validator<Prisma.TestDefaultArgs>(
         },
         comments: {
           select: {
+            comment: true,
+            createdAt: true,
             id: true,
           },
         },
@@ -25,18 +29,18 @@ const TestWithCommentsIdsAndVotesIds = Prisma.validator<Prisma.TestDefaultArgs>(
   },
 });
 
-export type TestWithCommentsIdsAndVotesIds = Prisma.TestGetPayload<typeof TestWithCommentsIdsAndVotesIds>;
+export type TestWithCommentsAndVotes = Prisma.TestGetPayload<typeof TestWithCommentsAndVotes>;
 
-export async function GET() {
+export async function GET(req: NextRequest, { params: { testId } }: { params: { testId: string } }) {
   const session = await getServerSession(authOptions);
 
   if (!session?.user) {
     return NextResponse.redirect('/sign-in');
   }
 
-  const result = await db.test.findMany({
+  const result = await db.test.findFirst({
     where: {
-      userId: session.user.id,
+      id: testId,
     },
     select: {
       id: true,
@@ -45,8 +49,9 @@ export async function GET() {
       video_description: true,
       thumbnails: {
         select: {
-          thumbnail_url: true,
           id: true,
+          thumbnail_url: true,
+          title: true,
           votes: {
             select: {
               id: true,
@@ -54,6 +59,8 @@ export async function GET() {
           },
           comments: {
             select: {
+              comment: true,
+              createdAt: true,
               id: true,
             },
           },
