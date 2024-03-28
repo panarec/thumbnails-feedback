@@ -24,6 +24,7 @@ const uploadFile = async (file: File) => {
 
     const { fields, getUrl, postUrl } = s3ResponseSchema.parse(data);
 
+
     const outboundToS3 = {
       ...fields,
       'Content-Type': file.type,

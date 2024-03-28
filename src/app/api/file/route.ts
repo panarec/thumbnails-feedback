@@ -39,7 +39,9 @@ export async function POST(req: Request): Promise<NextResponse> {
       Key: key,
     });
 
-    const getUrl = await getSignedUrl(s3, command);
+    const signedUrl = await getSignedUrl(s3, command);
+
+    const getUrl = signedUrl.split('?')[0];
 
     return NextResponse.json({ postUrl, fields, getUrl }, { status: 200 });
   } catch (error) {
