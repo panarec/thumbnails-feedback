@@ -1,26 +1,15 @@
-'use client';
-import { useEffect, useState } from 'react';
+'use client'
 import { Skeleton } from './ui/skeleton';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card';
 import Link from 'next/link';
 import { ArrowRightIcon, ChatBubbleIcon, HandIcon, TimerIcon } from '@radix-ui/react-icons';
-import { Test } from '@prisma/client';
+import { useTests } from '@/hooks/useTests';
 
 const TestsList = () => {
-  const [data, setData] = useState<Test[] | null>(null);
-  const [isLoading, setLoading] = useState(true);
+  const { tests, error, isLoading } = useTests();
 
-  try {
-    useEffect(() => {
-      fetch('/api/test/all')
-        .then((res) => res.json())
-        .then((data) => {
-          setData(data);
-          setLoading(false);
-        });
-    }, []);
-  } catch (error) {
-    console.error(error);
+  if (error) {
+    return <div className="flex justify-center items-center">Something went wrong. Please try again later. </div>;
   }
 
   if (isLoading) {
@@ -53,10 +42,10 @@ const TestsList = () => {
         </div>
       </>
     );
-  } else if (data !== null) {
+  } else if (tests) {
     return (
       <div className="grid grid-cols-5 gap-5 mb-10">
-        {data.map((item) => (
+        {tests.map((item) => (
           <Card key={item.id} className="shadow-sm">
             <CardHeader>
               <CardTitle>{item.test_name}</CardTitle>
@@ -90,6 +79,5 @@ const TestsList = () => {
       </div>
     );
   }
-  return;
 };
 export default TestsList;
