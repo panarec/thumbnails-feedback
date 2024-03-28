@@ -71,3 +71,31 @@ export async function GET(req: NextRequest, { params: { testId } }: { params: { 
 
   return NextResponse.json(result);
 }
+const TestWithIdAndTestName = Prisma.validator<Prisma.TestArgs>()({
+  select: {
+    id: true,
+    test_name: true,
+  },
+});
+
+export type TestWithIdAndTestName = Prisma.TestGetPayload<typeof TestWithIdAndTestName>;
+
+export async function DELETE(req: NextRequest, { params: { testId } }: { params: { testId: string } }) {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user) {
+    return NextResponse.redirect('/sign-in');
+  }
+
+  const result = await db.test.delete({
+    where: {
+      id: testId,
+    },
+    select: {
+      id: true,
+      test_name: true,
+    },
+  });
+
+  return NextResponse.json(result);
+}

@@ -7,7 +7,19 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 const TestsList = () => {
-  const { tests, error, isLoading } = useTests();
+  const { tests, error, isLoading, mutate } = useTests();
+  const handleDeleteItem = async (id: string) => {
+    const newTests = tests?.filter((item) => item.id !== id);
+    mutate(newTests, false);
+    try {
+      await fetch(`/api/test/${id}`, {
+        method: 'DELETE',
+      });
+      mutate();
+    } catch (error) {
+      mutate(tests, false);
+    }
+  };
 
   if (error) {
     return <div className="flex justify-center items-center">Something went wrong. Please try again later. </div>;
@@ -47,7 +59,7 @@ const TestsList = () => {
     return (
       <div className="grid grid-cols-5 gap-5 mb-10">
         {tests.map((item) => (
-          <TestItem key={item.id} test={item} />
+          <TestItem key={item.id} test={item} onDelete={handleDeleteItem} />
         ))}
       </div>
     );
@@ -55,7 +67,7 @@ const TestsList = () => {
     return (
       <div className="w-full flex items-center gap-3 flex-col">
         <h3 className="text-4xl flex justify-center items-center after:content-['\01F50D']  after:ml-2 ">
-          No tests found 
+          No tests found
         </h3>
         <Link href="/new-test" className={buttonVariants()}>
           Let&apos;s create one!
