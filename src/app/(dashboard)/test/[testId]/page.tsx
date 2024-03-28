@@ -1,11 +1,11 @@
 'use client';
 import { FC } from 'react';
-import DasboardLayout from '../../(dashboard)/layout';
 import { useTestDetail } from '@/hooks/useTest';
 import { Loading } from '@/components/ui/graphics/Loading';
 import { ThumbnailItem } from '@/components/ThumbnailItem';
 import Link from 'next/link';
 import { ArrowLeftIcon } from '@radix-ui/react-icons';
+import DashboardTitle from '@/components/DashboardTitle';
 
 interface TestPageProps {
   params: {
@@ -18,25 +18,20 @@ const TestPage: FC<TestPageProps> = ({ params }) => {
 
   if (isLoading)
     return (
-      <DasboardLayout title="Loading...">
-        <div className="flex flex-col h-full items-center justify-center">
-          <div className="w-1/4">
-            <Loading />
-          </div>
-          <span>Getting your best thumbnails...</span>
+      <div className="flex flex-col h-full items-center justify-center">
+        <div className="w-1/4">
+          <Loading />
         </div>
-      </DasboardLayout>
+        <span>Getting your best thumbnails...</span>
+      </div>
     );
   if (error) {
-    return (
-      <DasboardLayout title="Error">
-        <div className="flex justify-center items-center">Something went wrong. Please try again later. </div>
-      </DasboardLayout>
-    );
+    return <div className="flex justify-center items-center">Something went wrong. Please try again later. </div>;
   }
   if (test)
     return (
-      <DasboardLayout title={test?.test_name}>
+      <>
+        <DashboardTitle customTitle={test.test_name} />
         <Link href="/dashboard" className="flex flex-row items-center mb-3">
           <ArrowLeftIcon />
           Back
@@ -46,7 +41,7 @@ const TestPage: FC<TestPageProps> = ({ params }) => {
             <ThumbnailItem key={thumbnail.id} thumbnail={thumbnail} />
           ))}
         </div>
-      </DasboardLayout>
+      </>
     );
 };
 
