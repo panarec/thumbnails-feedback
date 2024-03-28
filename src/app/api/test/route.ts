@@ -5,6 +5,11 @@ import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
+export type CreateTestResponse = {
+  test_name: string;
+  id: number;
+};
+
 export async function POST(request: Request): Promise<NextResponse> {
   const body = (await request.json()) as z.infer<typeof formSchema>;
   const session = await getServerSession(authOptions);
@@ -12,9 +17,8 @@ export async function POST(request: Request): Promise<NextResponse> {
   if (!session?.user) {
     return NextResponse.redirect('/sign-in');
   }
-  console.log(body.testItems)
 
-  await db.test.create({
+  const data = await db.test.create({
     data: {
       test_name: body.testName,
       test_duration: body.testDuration,
@@ -33,7 +37,11 @@ export async function POST(request: Request): Promise<NextResponse> {
         },
       },
     },
+    select: {
+      test_name: true,
+      id: true,
+    },
   });
 
-  return NextResponse.json({ message: 'Hello from the API' });
+  return NextResponse.json(data);
 }

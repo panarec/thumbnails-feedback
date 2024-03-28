@@ -122,6 +122,7 @@ const FileInput = forwardRef<HTMLInputElement, InputProps>(({ className, ...prop
         return;
       }
       setSelectedFile(e.dataTransfer.files[0]);
+      setValue(`testItems.${props.index}.file`, e.dataTransfer.files[0]);
 
       e.dataTransfer.clearData();
     }
@@ -166,6 +167,11 @@ const FileInput = forwardRef<HTMLInputElement, InputProps>(({ className, ...prop
               onDragLeave={handleDrag}
               onDragOver={handleDrag}
               onDrop={handleDrop}
+              onReset={() => {
+                setSelectedFile(undefined);
+                setPreview(undefined);
+                resetField(`testItems.${props.index}.file`);
+              }}
             />
 
             <UploadIcon className="w-10 h-10" />

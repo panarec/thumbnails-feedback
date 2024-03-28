@@ -11,6 +11,10 @@ import { Button } from '@/components/ui/button';
 import ImageUpload from '../ui/image-upload';
 import { useS3Upload } from '@/hooks/use-s3-upload';
 import Link from 'next/link';
+import { toast, useToast } from '../ui/use-toast';
+import { useState } from 'react';
+import { Test } from '@prisma/client';
+import { CreateTestResponse } from '@/app/api/test/route';
 
 export const formSchema = z.object({
   testName: z.string().min(3, 'Test name must contain at least 3 character(s)').max(100),
@@ -43,6 +47,8 @@ const testItems = [
 
 const NewTestForm = () => {
   const { s3Upload } = useS3Upload();
+  const { toast } = useToast();
+  const [createTestResponse, setCreateTestResponse] = useState<CreateTestResponse | null>(null);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -67,7 +73,7 @@ const NewTestForm = () => {
 
       await Promise.all(filesUploadPromise);
 
-      fetch('/api/test', {
+      const response = await fetch(`/api/test`, {
         method: 'POST',
         body: JSON.stringify({
           ...data,
@@ -77,15 +83,33 @@ const NewTestForm = () => {
           })),
         }),
       });
+
+      if (!response.ok) {
+        toast({
+          title: 'Failed to create test',
+          description: 'Please try again later.',
+          variant: 'destructive',
+        });
+        throw new Error('Failed to create test');
+      }
+
+      const responseData = (await response.json()) as CreateTestResponse;
+      setCreateTestResponse(responseData);
     } catch (error) {
       throw new Error('Failed to create test');
     }
   };
 
-  if (form.formState.isSubmitSuccessful) {
+  if (form.formState.isSubmitSuccessful && createTestResponse) {
     return (
       <div className="flex flex-col items-center justify-center h-full">
-        <h1 className="text-2xl font-bold text-center">Test created successfully!</h1>
+        <h1 className="text-2xl font-bold text-center">
+          Test&nbsp;
+          <Link href={`/test/${createTestResponse.id}`} className="text-primary hover:underline">
+            &quot;{createTestResponse?.test_name}&quot;
+          </Link>
+          &nbsp;has been created successfully!
+        </h1>
         <p className="text-lg text-center">You can now add more tests or review existing ones.</p>
         <div className="flex flex-row gap-3">
           <Button className="mt-5" onClick={() => form.reset()}>
