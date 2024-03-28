@@ -1,4 +1,5 @@
-import { Test } from '@prisma/client';
+import { TestWithCommentsIdsAndVotesIds } from '@/app/api/test/all/route';
+import { Prisma, Test } from '@prisma/client';
 import useSWR from 'swr';
 
 export const useTests = () => {
@@ -6,7 +7,7 @@ export const useTests = () => {
   const { data, error, isLoading } = useSWR('/api/test/all', fetcher);
 
   return {
-    tests: data as Test[] | undefined,
+    tests: data as TestWithCommentsIdsAndVotesIds[] | undefined,
     error,
     isLoading,
   };

@@ -1,9 +1,31 @@
 import { authOptions } from '@/lib/auth';
 import { db } from '@/lib/db';
+import { Prisma, Test } from '@prisma/client';
 import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
 
-export async function GET(request: Request): Promise<NextResponse> {
+const TestWithCommentsIdsAndVotesIds = Prisma.validator<Prisma.TestDefaultArgs>()({
+  include: {
+    thumbnails: {
+      select: {
+        votes: {
+          select: {
+            id: true,
+          },
+        },
+        comments: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    },
+  },
+});
+
+export type TestWithCommentsIdsAndVotesIds = Prisma.TestGetPayload<typeof TestWithCommentsIdsAndVotesIds>;
+
+export async function GET() {
   const session = await getServerSession(authOptions);
 
   if (!session?.user) {
@@ -21,9 +43,16 @@ export async function GET(request: Request): Promise<NextResponse> {
       video_description: true,
       thumbnails: {
         select: {
-          id: true,
-          title: true,
-          thumbnail_url: true,
+          votes: {
+            select: {
+              id: true,
+            },
+          },
+          comments: {
+            select: {
+              id: true,
+            },
+          },
         },
       },
     },
