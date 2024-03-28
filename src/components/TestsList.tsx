@@ -1,11 +1,10 @@
 'use client';
 import { Skeleton } from './ui/skeleton';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card';
-import Link from 'next/link';
-import { ArrowRightIcon, ChatBubbleIcon, HandIcon, TimerIcon } from '@radix-ui/react-icons';
 import { useTests } from '@/hooks/useTests';
-import { useEffect, useState } from 'react';
 import { TestItem } from './TestItem';
+import { Button, buttonVariants } from './ui/button';
+import Link from 'next/link';
+import Image from 'next/image';
 
 const TestsList = () => {
   const { tests, error, isLoading } = useTests();
@@ -44,12 +43,23 @@ const TestsList = () => {
         </div>
       </>
     );
-  } else if (tests) {
+  } else if (tests?.length) {
     return (
       <div className="grid grid-cols-5 gap-5 mb-10">
         {tests.map((item) => (
           <TestItem key={item.id} test={item} />
         ))}
+      </div>
+    );
+  } else {
+    return (
+      <div className="w-full flex items-center gap-3 flex-col">
+        <h3 className="text-4xl flex justify-center items-center after:content-['\01F50D']  after:ml-2 ">
+          No tests found 
+        </h3>
+        <Link href="/new-test" className={buttonVariants()}>
+          Let&apos;s create one!
+        </Link>
       </div>
     );
   }

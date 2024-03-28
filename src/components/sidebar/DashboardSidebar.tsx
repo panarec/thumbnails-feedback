@@ -8,12 +8,14 @@ const sidebarMenu = [
 ];
 const DasboardSidebar = () => {
   return (
-    <div className="p-10 rounded-sm drop-shadow-sm bg-slate-50 mr-5 sticky top-10">
+    <div className="py-10 rounded-md drop-shadow-sm bg-slate-50 mr-5 sticky top-1/2 -translate-y-1/2">
       <ul className="min-w-40">
         {sidebarMenu.map((item, index) => (
-          <li key={index} className="my-4 pr-10 flex flex-row items-center">
-            {item.icon && <item.icon className="w-5 h-5 mr-2 text-primary" />}
-            <Link href={item.href}>{item.label}</Link>
+          <li key={index}>
+            <Link href={item.href} className="px-10 py-4 flex flex-row items-center hover:bg-slate-100">
+              {item.icon && <item.icon className="w-5 h-5 mr-2 text-primary" />}
+              {item.label}
+            </Link>
           </li>
         ))}
       </ul>

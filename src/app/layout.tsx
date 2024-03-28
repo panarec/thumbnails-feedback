@@ -4,7 +4,7 @@ import './globals.css';
 import Navbar from '@/components/Navbar';
 import { Toaster } from '@/components/ui/toaster';
 
-const poppins = Poppins({ weight: "700", subsets: ["latin"] });
+const poppins = Poppins({ weight: '700', subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -19,11 +19,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${poppins.className} h-[calc(100vh - 200px)] bg-white text-slate-900 antialiased dark:bg-slate-900 dark:text-slate-50 overflow-x-hidden`}
+        className={`${poppins.className}  bg-white text-slate-900 antialiased dark:bg-slate-900 dark:text-slate-50 overflow-x-hidden`}
       >
         <Navbar />
         <div></div>
-        <main className="h-screen flex flex-col container">{children}</main>
+        <main className=" flex flex-col container h-[calc(100vh - 200px)]">{children}</main>
         <Toaster />
       </body>
     </html>

@@ -5,7 +5,7 @@ const DasboardLayout = ({ children }: { children: ReactNode }) => {
   return (
     <>
       <div className="grid grid-cols-[auto_minmax(0,1fr)] mt-5">
-        <div className="overflow-hidden">
+        <div className="min-h-[calc(100vh-200px)]">
           <DasboardSidebar />
         </div>
         <main className="w-full">{children}</main>
