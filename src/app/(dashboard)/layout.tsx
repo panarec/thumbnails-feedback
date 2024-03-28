@@ -4,14 +4,15 @@ import DashboardTitle from '@/components/DashboardTitle';
 
 interface DasboardLayoutProps {
   children: ReactNode;
+  title: string;
 }
 
-const DasboardLayout: FC<DasboardLayoutProps> = ({ children }) => {
+const DasboardLayout: FC<DasboardLayoutProps> = ({ children, title}) => {
   return (
     <>
       <div className="grid grid-cols-[auto_minmax(0,1fr)] mt-5">
         <div></div>
-        <DashboardTitle />
+        <DashboardTitle customTitle={title} />
         <div className="overflow-hidden">
           <DasboardSidebar />
         </div>
