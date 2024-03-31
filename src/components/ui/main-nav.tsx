@@ -19,9 +19,9 @@ interface MainNavProps {
 
 export async function MainNav({ siteConfig }: MainNavProps) {
   return (
-    <div className="flex gap-6 md:gap-10">
-      <Link href="/" className="hidden items-center space-x-2 md:flex">
-        <span className="hidden font-bold sm:inline-block">{siteConfig?.name}</span>
+    <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
+      <Link href="/" className="flex items-center gap-2 text-lg font-semibold md:text-base">
+        <span className="">{siteConfig?.name}</span>
       </Link>
       {siteConfig?.mainNav?.length ? (
         <nav className="hidden gap-6 md:flex">
@@ -42,7 +42,7 @@ export async function MainNav({ siteConfig }: MainNavProps) {
           )}
         </nav>
       ) : null}
-      <DropdownMenu>
+      {/* <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="-ml-4 text-base hover:bg-transparent focus:ring-0 md:hidden">
             <span className="font-bold">Menu</span>
@@ -64,7 +64,7 @@ export async function MainNav({ siteConfig }: MainNavProps) {
               )
           )}
         </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
+      </DropdownMenu> */}
+    </nav>
   );
 }

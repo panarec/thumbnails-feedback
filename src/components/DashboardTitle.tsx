@@ -11,7 +11,7 @@ const DashboardTitle = ({ customTitle, classname }: { customTitle: string; class
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
 
-  const customClass = clsx('scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight mt-10 mb-10', classname);
+  const customClass = clsx('scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight md:mt-10 mb-10', classname);
 
   return <h2 className={customClass}>{customTitle ? customTitle : title}</h2>;
 };

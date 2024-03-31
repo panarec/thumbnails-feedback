@@ -6,6 +6,8 @@ import UserAccountNav from './UserAccountNav';
 import { MainNav } from './ui/main-nav';
 import { getSiteConfig } from '@/config/site';
 import Header from './ui/header';
+import { SideNav } from './ui/side-nav';
+import { MobileNav } from './ui/mobile-nav';
 
 const Navbar = async () => {
   const session = await getServerSession(authOptions);
@@ -14,9 +16,10 @@ const Navbar = async () => {
 
   return (
     <Header>
-      <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
-        <MainNav siteConfig={siteConfig} />
-        <div className="flex flex-1 items-center justify-end space-x-4">
+      <MainNav siteConfig={siteConfig} />
+      <MobileNav />
+      <SideNav />
+      {/* <div className="flex flex-1 items-center justify-end space-x-4">
           <nav className="flex items-center space-x-1">
             {session?.user ? (
               <UserAccountNav />
@@ -26,8 +29,7 @@ const Navbar = async () => {
               </Link>
             )}
           </nav>
-        </div>
-      </div>
+        </div> */}
     </Header>
   );
 };

@@ -19,11 +19,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${poppins.className}  bg-white text-slate-900 antialiased dark:bg-slate-900 dark:text-slate-50 overflow-x-hidden`}
+        className={`${poppins.className}  min-h-[calc(100vh - 200px)] bg-white text-slate-900 antialiased dark:bg-slate-900 dark:text-slate-50 w-full flex flex-col`}
       >
         <Navbar />
         <div></div>
-        <main className=" flex flex-col container h-[calc(100vh - 200px)]">{children}</main>
+        <main className=" flex flex-col md:container">{children}</main>
         <Toaster />
       </body>
     </html>

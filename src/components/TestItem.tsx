@@ -82,7 +82,7 @@ export const TestItem: FC<TestItemProps> = ({ test, onDelete }) => {
       </CardContent>
       <CardFooter>
         <Link
-          href={`/test/${test.id}`}
+          href={`/dashboard/${test.id}`}
           className="text-primary flex flex-row justify-center w-full items-center hover:scale-90 transition-all "
         >
           View test <ArrowRightIcon />
