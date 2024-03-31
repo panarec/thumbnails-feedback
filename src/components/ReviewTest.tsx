@@ -38,7 +38,22 @@ const ReviewTest = () => {
   }
 
   const onSubmit = async (data: z.infer<typeof reviewSchema>) => {
-    console.log(data);
+    const response = await fetch('/api/review', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    // if (response.ok) {
+    //   router.push('/sign-in');
+    // } else {
+    //   const error = await response.json();
+    //   form.setError('username', {
+    //     type: 'server',
+    //     message: error.error,
+    //   });
+    // }
   };
 
   if (review) {

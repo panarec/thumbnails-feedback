@@ -32,7 +32,7 @@ model Test {
   test_duration  Int
   video_description String?
   userId   String
-  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   thumbnails Thumbnail[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -45,7 +45,7 @@ model Thumbnail {
   votes    Vote[]
   comments Comment[]
   testId   String
-  test     Test     @relation(fields: [testId], references: [id], onDelete: Cascade)
+  test     Test     @relation(fields: [testId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -54,9 +54,9 @@ model Comment {
   id        String   @id @default(uuid())
   comment   String
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   thumbnailId String
-  thumbnail Thumbnail @relation(fields: [thumbnailId], references: [id], onDelete: Cascade)
+  thumbnail Thumbnail @relation(fields: [thumbnailId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -64,9 +64,9 @@ model Comment {
 model Vote {
   id        String   @id @default(uuid())
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   thumbnailId String
-  thumbnail Thumbnail @relation(fields: [thumbnailId], references: [id], onDelete: Cascade)
+  thumbnail Thumbnail @relation(fields: [thumbnailId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
