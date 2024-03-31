@@ -1,23 +1,32 @@
-import { CircleUser, Menu, Package2, Search } from 'lucide-react';
-import { Button } from './button';
-import { Sheet, SheetContent, SheetTrigger } from './sheet';
-import Link from 'next/link';
-import { Input } from './input';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from './dropdown-menu';
+'use client';
 
-export const SideNav = () => {
+import { CircleUser } from 'lucide-react';
+import { Button } from './button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from './dropdown-menu';
+import { signOut } from 'next-auth/react';
+
+export const SideNav = async () => {
   return (
-    <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
-      <form className="ml-auto flex-1 sm:flex-initial">
-        <div className="relative">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Search products..."
-            className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]"
-          />
-        </div>
-      </form>
+    <div className="flex items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
+      <Button
+        className="bg-transparent border border-primary text-primary px-4 py-2 rounded-md hover:bg-primary/90 hover:text-primary-foreground"
+        onClick={() =>
+          signOut({
+            redirect: true,
+            callbackUrl: '/sign-in',
+          })
+        }
+      >
+        Sign out
+      </Button>
+
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="secondary" size="icon" className="rounded-full">

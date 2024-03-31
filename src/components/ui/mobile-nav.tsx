@@ -2,8 +2,14 @@ import { Menu, Package2 } from 'lucide-react';
 import { Button } from './button';
 import { Sheet, SheetContent, SheetTrigger } from './sheet';
 import Link from 'next/link';
+import { SiteConfig } from '@/config/site';
+import { FC } from 'react';
 
-export const MobileNav = () => {
+interface MobileNavProps {
+  siteConfig?: SiteConfig;
+}
+
+export const MobileNav: FC<MobileNavProps> = ({ siteConfig }) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -18,21 +24,11 @@ export const MobileNav = () => {
             <Package2 className="h-6 w-6" />
             <span className="sr-only">Acme Inc</span>
           </Link>
-          <Link href="#" className="text-muted-foreground hover:text-foreground">
-            Dashboard
-          </Link>
-          <Link href="#" className="text-muted-foreground hover:text-foreground">
-            Orders
-          </Link>
-          <Link href="#" className="text-muted-foreground hover:text-foreground">
-            Products
-          </Link>
-          <Link href="#" className="text-muted-foreground hover:text-foreground">
-            Customers
-          </Link>
-          <Link href="#" className="hover:text-foreground">
-            Settings
-          </Link>
+          {siteConfig?.mainNav?.map((item, index) => (
+            <Link key={index} href={item.href} className="text-muted-foreground hover:text-foreground">
+              {item.title}
+            </Link>
+          ))}
         </nav>
       </SheetContent>
     </Sheet>

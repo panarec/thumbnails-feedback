@@ -27,7 +27,7 @@ const Header: FC<HeaderProps> = ({ children }) => {
       className={`sticky top-0 border-b  bg-background ${scrolled ? 'border-b-4 border-red-400 transition-all' : ''}`}
     >
       <div className="md:container">
-        <div className="w-full flex h-16 items-center gap-4  px-4 md:px-10 ">{children}</div>
+        <div className="w-full flex h-16 items-center gap-4  px-4 md:px-10 justify-between ">{children}</div>
       </div>
     </header>
   );
