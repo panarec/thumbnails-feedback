@@ -29,7 +29,6 @@ export async function GET(req: NextRequest) {
   if (!session?.user) {
     return NextResponse.redirect('/sign-in');
   }
-  console.log(session.user.id);
 
   const result = await db.test.findFirst({
     where: {
@@ -41,6 +40,9 @@ export async function GET(req: NextRequest) {
             },
           },
         },
+      },
+      NOT: {
+        userId: session.user.id,
       },
     },
     select: {

@@ -105,7 +105,7 @@ const NewTestForm = () => {
       <div className="flex flex-col items-center justify-center h-full">
         <h1 className="text-2xl font-bold text-center">
           Test&nbsp;
-          <Link href={`/${createTestResponse.id}`} className="text-primary hover:underline">
+          <Link href={`/dashboard/${createTestResponse.id}`} className="text-primary hover:underline">
             &quot;{createTestResponse?.test_name}&quot;
           </Link>
           &nbsp;has been created successfully!

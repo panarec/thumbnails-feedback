@@ -3,6 +3,10 @@ import { Thumbnail } from '@prisma/client';
 import Image from 'next/image';
 import { FC } from 'react';
 import { AspectRatio } from './ui/aspect-ratio';
+import { ChatBubbleIcon, HandIcon } from '@radix-ui/react-icons';
+import { Separator } from './ui/separator';
+import { Card, CardContent, CardHeader } from './ui/card';
+import { format } from 'date-fns';
 
 interface ThumbnailItemProps {
   thumbnail: TestWithCommentsAndVotes['thumbnails'][0];
@@ -15,17 +19,27 @@ export const ThumbnailItem: FC<ThumbnailItemProps> = ({ thumbnail }) => {
         <Image src={thumbnail.thumbnail_url} alt="thumbnail-preview-image" fill className="rounded-md object-cover" />
       </AspectRatio>
       <h2 className="text-xl">{thumbnail.title}</h2>
-      <span className="w-full border-b-2" />
-      <h2 className="text-2xl">Votes: {thumbnail.votes.length}</h2>
-      <h2>Comments: {thumbnail.comments.length}</h2>
-      <ul>
-        {thumbnail.comments.map((comment) => (
-          <li key={comment.id}>
-            <p>{comment.comment}</p>
-            <p>{comment.createdAt.toString()}</p>
-          </li>
-        ))}
+      <ul className="flex flex-row gap-5">
+        <li className="list-none text-2xl flex flex-row items-center gap-2">
+          <HandIcon className="text-primary" />
+          {thumbnail.votes.length}
+        </li>
+        <li className="list-none text-2xl flex flex-row items-center gap-2">
+          <ChatBubbleIcon className="text-primary" />
+          {thumbnail.comments.length}
+        </li>
       </ul>
+      <Separator />
+      <h2>Comments:</h2>
+      {thumbnail.comments.map((comment) => (
+        <Card key={comment.id}>
+          <CardHeader>
+            <h3 className="text-lg text-primary">{comment.user.username}</h3>
+            <h4 className="text-slate-300 text-xs italic">{format(comment.createdAt, 'dd/MM/yyyy hh:mm aaa')}</h4>
+          </CardHeader>
+          <CardContent>{comment.comment}</CardContent>
+        </Card>
+      ))}
     </div>
   );
 };

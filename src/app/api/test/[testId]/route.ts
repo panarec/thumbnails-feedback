@@ -19,6 +19,11 @@ const TestWithCommentsAndVotes = Prisma.validator<Prisma.TestDefaultArgs>()({
         },
         comments: {
           select: {
+            user: {
+              select: {
+                username: true,
+              },
+            },
             comment: true,
             createdAt: true,
             id: true,
@@ -59,6 +64,11 @@ export async function GET(req: NextRequest, { params: { testId } }: { params: { 
           },
           comments: {
             select: {
+              user: {
+                select: {
+                  username: true,
+                },
+              },
               comment: true,
               createdAt: true,
               id: true,
