@@ -1,11 +1,11 @@
 import DashboardTitle from '@/components/DashboardTitle';
-import ReviewTest from '@/components/ReviewTest';
+import Reviews from '@/components/Reviews';
 
 const ReviewPage = async () => {
   return (
     <div>
       <DashboardTitle customTitle="Review" />
-      <ReviewTest />
+      <Reviews />
     </div>
   );
 };

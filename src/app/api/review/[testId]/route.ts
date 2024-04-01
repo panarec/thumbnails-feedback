@@ -1,21 +1,19 @@
 import { authOptions } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { Prisma, Test } from '@prisma/client';
+import { equal } from 'assert';
 import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 
 const Review = Prisma.validator<Prisma.TestDefaultArgs>()({
-  include: {
+  select: {
+    id: true,
+    video_description: true,
     thumbnails: {
       select: {
         id: true,
         thumbnail_url: true,
         title: true,
-        votes: {
-          select: {
-            id: true,
-          },
-        },
       },
     },
   },
@@ -23,12 +21,15 @@ const Review = Prisma.validator<Prisma.TestDefaultArgs>()({
 
 export type Review = Prisma.TestGetPayload<typeof Review>;
 
-export async function GET(req: NextRequest) {
+export async function GET(req: NextRequest, { params: { testId } }: { params: { testId: string } }) {
   const session = await getServerSession(authOptions);
 
   if (!session?.user) {
     return NextResponse.redirect('/sign-in');
   }
+
+  console.log({ testId });
+  console.log({ userId: session.user.id });
 
   const result = await db.test.findFirst({
     where: {
@@ -41,12 +42,18 @@ export async function GET(req: NextRequest) {
           },
         },
       },
-      NOT: {
-        userId: session.user.id,
-      },
+      AND: {
+        id: {
+          not: testId, 
+        },
+        userId: {
+          not: session.user.id,
+        },
+      }
     },
     select: {
       id: true,
+      userId: true,
       video_description: true,
       thumbnails: {
         select: {
@@ -57,6 +64,9 @@ export async function GET(req: NextRequest) {
       },
     },
   });
+
+  console.log('resultID', result?.id);
+  console.log('resultUserId', result?.userId);
 
   return NextResponse.json(result);
 }

@@ -30,11 +30,11 @@ export const ThumbnailItem: FC<ThumbnailItemProps> = ({ thumbnail }) => {
         </li>
       </ul>
       <Separator />
-      <h2>Comments:</h2>
+      {thumbnail.comments && thumbnail.comments.length > 0 && <h2>Comments:</h2>}
       {thumbnail.comments.map((comment) => (
         <Card key={comment.id}>
           <CardHeader>
-            <h3 className="text-lg text-primary">{comment.user.username}</h3>
+            <h3 className="text-sm text-primary">{comment.user.username}</h3>
             <h4 className="text-slate-300 text-xs italic">{format(comment.createdAt, 'dd/MM/yyyy hh:mm aaa')}</h4>
           </CardHeader>
           <CardContent>{comment.comment}</CardContent>

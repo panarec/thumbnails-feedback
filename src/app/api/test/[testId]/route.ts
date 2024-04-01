@@ -15,6 +15,7 @@ const TestWithCommentsAndVotes = Prisma.validator<Prisma.TestDefaultArgs>()({
         votes: {
           select: {
             id: true,
+            userId: true,
           },
         },
         comments: {
@@ -60,6 +61,7 @@ export async function GET(req: NextRequest, { params: { testId } }: { params: { 
           votes: {
             select: {
               id: true,
+              userId: true,
             },
           },
           comments: {
