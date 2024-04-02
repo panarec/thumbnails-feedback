@@ -205,6 +205,26 @@ const FileInput = forwardRef<HTMLInputElement, InputProps>(({ className, ...prop
         ) : (
           <AspectRatio ratio={16 / 9} className="w-full h-full">
             {preview && <Image src={preview} alt="thumbnail-preview-image" fill className="rounded-md object-cover" />}
+            <FormField
+              control={control}
+              name={`testItems.${props.index}.file`}
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <input
+                      {...props}
+                      ref={ref}
+                      onChange={handleChange}
+                      accept="image/jpeg, image/jpg, image/png"
+                      id={props.id}
+                      type="file"
+                      className="hidden"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </AspectRatio>
         )}
       </div>

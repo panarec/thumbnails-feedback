@@ -16,7 +16,7 @@ export const ThumbnailItem: FC<ThumbnailItemProps> = ({ thumbnail }) => {
   return (
     <div className="flex flex-col gap-3">
       <AspectRatio ratio={16 / 9} className="w-full h-full">
-        <Image src={thumbnail.thumbnail_url} alt="thumbnail-preview-image" fill className="rounded-md object-cover" />
+        {<Image src={thumbnail.thumbnail_url} alt="thumbnail-preview-image" fill className="rounded-md object-cover" />}
       </AspectRatio>
       <h2 className="text-xl">{thumbnail.title}</h2>
       <ul className="flex flex-row gap-5">
