@@ -6,7 +6,7 @@ import { AspectRatio } from './ui/aspect-ratio';
 import { ChatBubbleIcon, HandIcon } from '@radix-ui/react-icons';
 import { Separator } from './ui/separator';
 import { Card, CardContent, CardHeader } from './ui/card';
-import { format } from 'date-fns';
+import { formatDistanceToNow } from 'date-fns';
 
 interface ThumbnailItemProps {
   thumbnail: TestWithCommentsAndVotes['thumbnails'][0];
@@ -35,7 +35,7 @@ export const ThumbnailItem: FC<ThumbnailItemProps> = ({ thumbnail }) => {
         <Card key={comment.id}>
           <CardHeader>
             <h3 className="text-sm text-primary">{comment.user.username}</h3>
-            <h4 className="text-slate-300 text-xs italic">{format(comment.createdAt, 'dd/MM/yyyy hh:mm aaa')}</h4>
+            <h4 className="text-slate-300 text-xs italic">{formatDistanceToNow(comment.createdAt, {addSuffix: true,})}</h4>
           </CardHeader>
           <CardContent>{comment.comment}</CardContent>
         </Card>

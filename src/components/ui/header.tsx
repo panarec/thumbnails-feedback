@@ -23,7 +23,7 @@ const Header: FC<HeaderProps> = ({ children }) => {
     };
   }, []);
   return (
-    <header className={`sticky top-0 border-b z-50 bg-white ${scrolled ? 'border-b-4 border-red-400 transition-all' : ''}`}>
+    <header className={`sticky top-0  z-50 bg-white ${scrolled ? 'border-b-4 border-red-400 transition-all' : ''}`}>
       <div className="md:container ">
         <div className="w-full flex h-16 items-center gap-4  px-4 md:px-10 justify-between ">{children}</div>
       </div>

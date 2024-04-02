@@ -15,21 +15,9 @@ import { signOut } from 'next-auth/react';
 export const SideNav = async () => {
   return (
     <div className="flex items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
-      <Button
-        className="bg-transparent border border-primary text-primary px-4 py-2 rounded-md hover:bg-primary/90 hover:text-primary-foreground"
-        onClick={() =>
-          signOut({
-            redirect: true,
-            callbackUrl: '/sign-in',
-          })
-        }
-      >
-        Sign out
-      </Button>
-
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="secondary" size="icon" className="rounded-full">
+          <Button variant="default" size="icon" className="rounded-full">
             <CircleUser className="h-5 w-5" />
             <span className="sr-only">Toggle user menu</span>
           </Button>
@@ -40,7 +28,17 @@ export const SideNav = async () => {
           <DropdownMenuItem>Settings</DropdownMenuItem>
           <DropdownMenuItem>Support</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Logout</DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() =>
+              signOut({
+                redirect: true,
+                callbackUrl: '/sign-in',
+              })
+            }
+            
+          >
+            Logout
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

@@ -27,7 +27,6 @@ export const TestItem: FC<TestItemProps> = ({ test, onDelete }) => {
     }
   }, [test]);
 
-
   return (
     <Card
       key={test.id}
@@ -37,7 +36,7 @@ export const TestItem: FC<TestItemProps> = ({ test, onDelete }) => {
     >
       {isHovered && (
         <Button
-          className="bg-transparent absolute right-5 top-5 hover:bg-red-100 rounded-full p-2 m-0 transition-all hover:cursor-pointer w-auto h-auto"
+          className="absolute right-5 top-5 bg-red-100 hover:bg-red-100 hover:scale-110 rounded-full p-2 m-0 transition-all hover:cursor-pointer w-auto h-auto"
           onClick={() => onDelete(test.id)}
         >
           <TrashIcon className="text-destructive  w-5 h-5 " />
