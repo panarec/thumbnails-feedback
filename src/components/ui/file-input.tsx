@@ -205,6 +205,18 @@ const FileInput = forwardRef<HTMLInputElement, InputProps>(({ className, ...prop
         ) : (
           <AspectRatio ratio={16 / 9} className="w-full h-full">
             {preview && <Image src={preview} alt="thumbnail-preview-image" fill className="rounded-md object-cover" />}
+            <div
+              className="absolute inset-0 cursor-pointer"
+              onDragEnter={handleDrag}
+              onDragLeave={handleDrag}
+              onDragOver={handleDrag}
+              onDrop={handleDrop}
+              onReset={() => {
+                setSelectedFile(undefined);
+                setPreview(undefined);
+                resetField(`testItems.${props.index}.file`);
+              }}
+            />
             <FormField
               control={control}
               name={`testItems.${props.index}.file`}

@@ -16,7 +16,7 @@ export const ThumbnailItem: FC<ThumbnailItemProps> = ({ thumbnail }) => {
   return (
     <div className="flex flex-col gap-3">
       <AspectRatio ratio={16 / 9} className="w-full h-full">
-        {<Image src={thumbnail.thumbnail_url} alt="thumbnail-preview-image" fill className="rounded-md object-cover" />}
+        <Image src={thumbnail.thumbnail_url} alt="thumbnail-preview-image" fill className="rounded-md object-cover" />
       </AspectRatio>
       <h2 className="text-xl">{thumbnail.title}</h2>
       <ul className="flex flex-row gap-5">
@@ -35,7 +35,9 @@ export const ThumbnailItem: FC<ThumbnailItemProps> = ({ thumbnail }) => {
         <Card key={comment.id}>
           <CardHeader>
             <h3 className="text-sm text-primary">{comment.user.username}</h3>
-            <h4 className="text-slate-300 text-xs italic">{formatDistanceToNow(comment.createdAt, {addSuffix: true,})}</h4>
+            <h4 className="text-slate-300 text-xs italic">
+              {formatDistanceToNow(comment.createdAt, { addSuffix: true })}
+            </h4>
           </CardHeader>
           <CardContent>{comment.comment}</CardContent>
         </Card>
