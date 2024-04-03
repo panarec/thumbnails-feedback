@@ -6,16 +6,24 @@ import { MobileNav } from './ui/mobile-nav';
 import { getServerSession } from 'next-auth';
 import Link from 'next/link';
 import { buttonVariants } from './ui/button';
+import { authOptions } from '@/lib/auth';
 
 const Navbar = async () => {
   const siteConfig = await getSiteConfig();
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
 
+  console.log(session);
   return (
     <Header>
       <MainNav siteConfig={siteConfig} />
       <MobileNav siteConfig={siteConfig} />
-      {session?.user ? <SideNav /> : <Link href="/sign-in" className={buttonVariants()}>Sign in</Link>}
+      {session?.user ? (
+        <SideNav username={session.user.username} />
+      ) : (
+        <Link href="/sign-in" className={buttonVariants()}>
+          Sign in
+        </Link>
+      )}
     </Header>
   );
 };

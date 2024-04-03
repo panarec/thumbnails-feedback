@@ -12,7 +12,7 @@ import {
 } from './dropdown-menu';
 import { signOut } from 'next-auth/react';
 
-export const SideNav = async () => {
+export const SideNav = async ({ username }: { username: string }) => {
   return (
     <div className="flex items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
       <DropdownMenu>
@@ -23,7 +23,7 @@ export const SideNav = async () => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuLabel>Welcome, {username}!</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem>Settings</DropdownMenuItem>
           <DropdownMenuItem>Support</DropdownMenuItem>
@@ -35,7 +35,6 @@ export const SideNav = async () => {
                 callbackUrl: '/sign-in',
               })
             }
-            
           >
             Logout
           </DropdownMenuItem>
