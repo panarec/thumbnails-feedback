@@ -7,6 +7,7 @@ import { ChatBubbleIcon, HandIcon } from '@radix-ui/react-icons';
 import { Separator } from './ui/separator';
 import { Card, CardContent, CardHeader } from './ui/card';
 import { formatDistanceToNow } from 'date-fns';
+import { CircleUser } from 'lucide-react';
 
 interface ThumbnailItemProps {
   thumbnail: TestWithCommentsAndVotes['thumbnails'][0];
@@ -33,11 +34,16 @@ export const ThumbnailItem: FC<ThumbnailItemProps> = ({ thumbnail }) => {
       {thumbnail.comments && thumbnail.comments.length > 0 && <h2>Comments:</h2>}
       {thumbnail.comments.map((comment) => (
         <Card key={comment.id}>
-          <CardHeader>
-            <h3 className="text-sm text-primary">{comment.user.username}</h3>
-            <h4 className="text-slate-300 text-xs italic">
-              {formatDistanceToNow(comment.createdAt, { addSuffix: true })}
-            </h4>
+          <CardHeader className="flex flex-row items-center gap-2 ">
+            <div>
+              <CircleUser  />
+            </div>
+            <div>
+              <h3 className="text-sm text-primary">{comment.user.username}</h3>
+              <h4 className="text-slate-300 text-xs italic">
+                {formatDistanceToNow(comment.createdAt, { addSuffix: true })}
+              </h4>
+            </div>
           </CardHeader>
           <CardContent>{comment.comment}</CardContent>
         </Card>

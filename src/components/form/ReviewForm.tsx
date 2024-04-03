@@ -15,13 +15,15 @@ import { cn, getAlphabetByIndex } from '@/lib/utils';
 import { useReview } from '@/hooks/useReview';
 import { useRouter } from 'next/navigation';
 import { useTestDetail } from '@/hooks/useTest';
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import { getSession, useSession } from 'next-auth/react';
 import { set } from 'date-fns';
 
 const reviewSchema = z.object({
   votedThumbnailId: z.string().min(1, 'Please pick a thumbnail.'),
-  comments: z.array(z.object({ thumbnailId: z.string().optional(), comment: z.string().optional() })).optional(),
+  comments: z
+    .array(z.object({ thumbnailId: z.string().optional(), comment: z.string().optional() }).optional())
+    .optional(),
 });
 
 export const ReviewForm = ({ testId }: { testId: string }) => {
@@ -45,9 +47,13 @@ export const ReviewForm = ({ testId }: { testId: string }) => {
     resolver: zodResolver(reviewSchema),
     defaultValues: {
       votedThumbnailId: '',
-      comments: test?.thumbnails.map((thumbnail) => ({ thumbnailId: thumbnail.id, comment: '' })),
+      comments: [],
     },
   });
+
+  useEffect(() => {
+    console.log(form.formState.errors);
+  }, [form.formState.errors]);
 
   const onSubmit = (data: z.infer<typeof reviewSchema>) => {
     fetch(`/api/review/${testId}`, {
@@ -58,16 +64,15 @@ export const ReviewForm = ({ testId }: { testId: string }) => {
       body: JSON.stringify(data),
     })
       .then(() => {
-        if(review){
-            router.push(`/review/${review?.id}`);
+        if (review) {
+          router.push(`/review/${review?.id}`);
         } else {
-            router.push('/review');
+          router.push('/review');
         }
       })
-      .catch((error) => console.error(error)).finally(() =>
-        setSubmitting(false)
-      );
-      setSubmitting(true);
+      .catch((error) => console.error(error))
+      .finally(() => setSubmitting(false));
+    setSubmitting(true);
   };
   // If the user has already reviewed the test, redirect them to the review page
   if (reviewed) {
@@ -163,7 +168,9 @@ export const ReviewForm = ({ testId }: { testId: string }) => {
             </AccordionItem>
           </Accordion>
           <div className="flex w-full justify-end mt-5">
-            <Button type="submit" disabled={submitting} >{submitting ? "Loading..." : "Next"}</Button>
+            <Button type="submit" disabled={submitting}>
+              {submitting ? 'Loading...' : 'Next'}
+            </Button>
           </div>
         </form>
       </Form>

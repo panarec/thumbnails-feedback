@@ -44,12 +44,12 @@ export async function GET(req: NextRequest, { params: { testId } }: { params: { 
       },
       AND: {
         id: {
-          not: testId, 
+          not: testId,
         },
         userId: {
           not: session.user.id,
         },
-      }
+      },
     },
     select: {
       id: true,
@@ -89,8 +89,11 @@ export async function POST(req: NextRequest) {
 
   if (!body.comments) return NextResponse.json({ message: 'success' });
 
+  const validComments = body.comments.filter((comment: any) => comment);
+  console.log('validComments', validComments)
+
   const commentResponse = await db.comment.createMany({
-    data: body.comments.map((comment: any) => ({
+    data: validComments.map((comment: any) => ({
       userId: session.user.id,
       thumbnailId: comment.thumbnailId,
       comment: comment.comment,
