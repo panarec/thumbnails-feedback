@@ -9,6 +9,7 @@ import { AspectRatio } from './aspect-ratio';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from './form';
 import { useFormContext } from 'react-hook-form';
 import { MAX_FILE_SIZE } from '@/config/image';
+import { get } from 'http';
 
 interface FileWithUrl {
   name: string;
@@ -27,7 +28,7 @@ const FileInput = forwardRef<HTMLInputElement, InputProps>(({ className, ...prop
   const [dragActive, setDragActive] = useState<boolean>(false);
   const [preview, setPreview] = useState<string>();
   const [selectedFile, setSelectedFile] = useState<File>();
-  const { formState, setValue, control, resetField } = useFormContext();
+  const { formState, setValue, control, getFieldState, resetField } = useFormContext();
 
   const noInput = !preview;
 
@@ -134,13 +135,18 @@ const FileInput = forwardRef<HTMLInputElement, InputProps>(({ className, ...prop
       setPreview(undefined);
       return;
     }
-
     const objectUrl = URL.createObjectURL(selectedFile);
     setPreview(objectUrl);
-
     // free memory when ever this component is unmounted
     return () => URL.revokeObjectURL(objectUrl);
-  }, [selectedFile]);
+  }, [selectedFile, formState]);
+
+  useEffect(() => {
+    if (Object.keys(formState.dirtyFields).length === 0) {
+      setPreview(undefined);
+      selectedFile && setSelectedFile(undefined);
+    }
+  }, [formState]);
 
   return (
     <label
@@ -167,11 +173,6 @@ const FileInput = forwardRef<HTMLInputElement, InputProps>(({ className, ...prop
               onDragLeave={handleDrag}
               onDragOver={handleDrag}
               onDrop={handleDrop}
-              onReset={() => {
-                setSelectedFile(undefined);
-                setPreview(undefined);
-                resetField(`testItems.${props.index}.file`);
-              }}
             />
 
             <UploadIcon className="w-10 h-10" />
@@ -211,11 +212,6 @@ const FileInput = forwardRef<HTMLInputElement, InputProps>(({ className, ...prop
               onDragLeave={handleDrag}
               onDragOver={handleDrag}
               onDrop={handleDrop}
-              onReset={() => {
-                setSelectedFile(undefined);
-                setPreview(undefined);
-                resetField(`testItems.${props.index}.file`);
-              }}
             />
             <FormField
               control={control}
