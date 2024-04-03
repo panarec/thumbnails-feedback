@@ -3,6 +3,7 @@ import { toast } from '@/components/ui/use-toast';
 import { FileTooLargeError } from '@/lib/exceptions';
 
 import { s3ResponseSchema } from '@/lib/validations/s3';
+import { computeSHA256 } from '@/lib/utils';
 
 interface UseS3UploadReturn {
   s3Upload: (file: File) => Promise<{ getUrl: string | null; error: boolean }>;
@@ -10,6 +11,8 @@ interface UseS3UploadReturn {
 
 const uploadFile = async (file: File) => {
   try {
+    const checksum = await computeSHA256(file);
+
     const res = await fetch('/api/file/', {
       method: 'POST',
       headers: {
@@ -17,31 +20,23 @@ const uploadFile = async (file: File) => {
       },
       body: JSON.stringify({
         fileType: file.type,
+        fileSize: file.size,
+        checksum: checksum,
       }),
     });
 
     const data = await res.json();
 
-    const { fields, getUrl, postUrl } = s3ResponseSchema.parse(data);
-
-
-    const outboundToS3 = {
-      ...fields,
-      'Content-Type': file.type,
-      file,
-    };
-
-    const formData = new FormData();
-
-    Object.entries(outboundToS3).forEach(([key, value]) => {
-      formData.append(key, value);
-    });
+    const { signedUrl, getUrl } = s3ResponseSchema.parse(data);
 
     try {
       // Upload to S3
-      await fetch(postUrl, {
-        method: 'POST',
-        body: formData,
+      await fetch(signedUrl, {
+        method: 'PUT',
+        body: file,
+        headers: {
+          'Content-Type': file.type,
+        },
       });
     } catch (error) {
       throw new FileTooLargeError();
