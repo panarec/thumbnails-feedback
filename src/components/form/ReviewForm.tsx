@@ -18,6 +18,7 @@ import { useTestDetail } from '@/hooks/useTest';
 import { use, useEffect, useState } from 'react';
 import { getSession, useSession } from 'next-auth/react';
 import { set } from 'date-fns';
+import { preload, useSWRConfig } from 'swr';
 
 const reviewSchema = z.object({
   votedThumbnailId: z.string().min(1, 'Please pick a thumbnail.'),
@@ -33,7 +34,7 @@ export const ReviewForm = ({ testId }: { testId: string }) => {
   const { review } = useReview(testId);
   const [reviewed, setReviewed] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-
+  const { mutate } = useSWRConfig();
   useEffect(() => {
     session.then((session) => {
       const reviewed = test?.thumbnails.some((thumbnail) =>
@@ -67,6 +68,7 @@ export const ReviewForm = ({ testId }: { testId: string }) => {
         if (review) {
           router.push(`/review/${review?.id}`);
         } else {
+          mutate('/api/reviews', undefined);
           router.push('/review');
         }
       })

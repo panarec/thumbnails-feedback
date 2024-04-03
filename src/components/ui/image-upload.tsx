@@ -9,9 +9,11 @@ import { FileInput } from './file-input';
 interface ImageUploadProps {
   id: string;
   index: number;
+  formReseted?: boolean;
+  setFormReseted?: (value: boolean) => void;
 }
 
-const ImageUpload: FC<ImageUploadProps> = ({ id, index }) => {
+const ImageUpload: FC<ImageUploadProps> = ({ id, index, formReseted, setFormReseted }) => {
   const context = useFormContext();
 
   return (
@@ -19,7 +21,7 @@ const ImageUpload: FC<ImageUploadProps> = ({ id, index }) => {
       <div className="flex justify-center">
         <TypographyH3>{id}</TypographyH3>
       </div>
-      <FileInput id={id} index={index} />
+      <FileInput id={id} index={index} formReseted={formReseted} setFormReseted={setFormReseted} />
       <FormField
         control={context.control}
         name={`testItems.${index}.videoName`}

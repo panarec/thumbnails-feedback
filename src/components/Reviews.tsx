@@ -4,6 +4,7 @@ import { useReviews } from '@/hooks/useReviews';
 import { buttonVariants } from './ui/button';
 import { useReview } from '@/hooks/useReview';
 import Link from 'next/link';
+import { Loading } from './ui/graphics/Loading';
 
 const Reviews = () => {
   const { reviewsCount, error, isLoading } = useReviews();
@@ -13,11 +14,17 @@ const Reviews = () => {
   }
 
   if (isLoading) {
-    return <div>Is loading</div>;
+    return (
+      <div className="flex flex-col h-full items-center justify-center">
+        <div className="w-1/4">
+          <Loading />
+        </div>
+        <span>Loading...</span>
+      </div>
+    );
   }
 
   if (reviewsCount && reviewsCount.count > 0) {
-    console.log(reviewsCount);
     return (
       <div className="w-full flex items-center gap-3 flex-col">
         <h3 className="text-4xl after:content-['\01F680'] after:ml-2">

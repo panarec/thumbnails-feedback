@@ -49,6 +49,7 @@ const NewTestForm = () => {
   const { s3Upload } = useS3Upload();
   const { toast } = useToast();
   const [createTestResponse, setCreateTestResponse] = useState<CreateTestResponse | null>(null);
+  const [formReseted, setFormReseted] = useState<boolean>(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -125,6 +126,11 @@ const NewTestForm = () => {
     );
   }
 
+  const discardForm = () => {
+    form.reset();
+    setFormReseted(true);
+  };
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -156,7 +162,13 @@ const NewTestForm = () => {
             )}
           />
           {testItems.map((item, index) => (
-            <ImageUpload id={item.id} index={index} key={index} />
+            <ImageUpload
+              id={item.id}
+              index={index}
+              key={index}
+              formReseted={formReseted}
+              setFormReseted={setFormReseted}
+            />
           ))}
           <div className="col-span-2">
             <FormField
@@ -182,7 +194,7 @@ const NewTestForm = () => {
             type="button"
             className="my-5"
             variant="outline"
-            onClick={() => form.reset()}
+            onClick={discardForm}
             disabled={form.formState.isSubmitting}
           >
             Discard
