@@ -4,6 +4,7 @@ import { Sheet, SheetContent, SheetTrigger } from './sheet';
 import Link from 'next/link';
 import { SiteConfig } from '@/config/site';
 import { FC } from 'react';
+import Image from 'next/image';
 
 interface MobileNavProps {
   siteConfig?: SiteConfig;
@@ -21,8 +22,8 @@ export const MobileNav: FC<MobileNavProps> = ({ siteConfig }) => {
       <SheetContent side="left">
         <nav className="grid gap-6 text-lg font-medium">
           <Link href="#" className="flex items-center gap-2 text-lg font-semibold">
-            <Package2 className="h-6 w-6" />
-            <span className="sr-only">Acme Inc</span>
+            <Image src="/logo.svg" alt="logo" width={40} height={40} />
+            <span className="">{siteConfig?.name}</span>
           </Link>
           {siteConfig?.mainNav?.map((item, index) => (
             <Link key={index} href={item.href} className="text-muted-foreground hover:text-foreground">

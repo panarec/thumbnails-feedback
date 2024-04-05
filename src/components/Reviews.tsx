@@ -27,7 +27,7 @@ const Reviews = () => {
   if (reviewsCount && reviewsCount.count > 0) {
     return (
       <div className="w-full flex items-center gap-3 flex-col">
-        <h3 className="text-4xl after:content-['\01F680'] after:ml-2">
+        <h3 className="text-xl sm:text-4xl after:content-['\01F680'] after:ml-2">
           <span className="text-primary">{reviewsCount.count}</span> reviews needed
         </h3>
         <Link href={`/review/${reviewsCount.firstReview.id}`} className={buttonVariants()}>
@@ -40,7 +40,7 @@ const Reviews = () => {
   if (reviewsCount?.count === 0 || !reviewsCount) {
     return (
       <div className="w-full flex items-center gap-3 flex-col">
-        <h3 className="text-4xl after:content-['\01F60E'] after:ml-2">No reviews needed</h3>
+        <h3 className="sm:text-4xl after:content-['\01F60E'] after:ml-2">No reviews needed</h3>
       </div>
     );
   }

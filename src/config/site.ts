@@ -32,14 +32,14 @@ export async function getSiteConfig() {
 
   if (session?.user) {
     return {
-      name: 'Thumbnails Feedback',
+      name: 'Thumbnail Feedbacks',
       description: '',
       mainNav: loggedUserNav,
       links: {},
     };
   } else {
     return {
-      name: 'Thumbnails Feedback',
+      name: 'Thumbnail Feedbacks',
       description: '',
       mainNav: guestNav,
       links: {},

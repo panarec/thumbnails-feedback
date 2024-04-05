@@ -134,7 +134,7 @@ const NewTestForm = () => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <FormField
             control={form.control}
             name="testName"
@@ -170,7 +170,7 @@ const NewTestForm = () => {
               setFormReseted={setFormReseted}
             />
           ))}
-          <div className="col-span-2">
+          <div className="sm:col-span-2">
             <FormField
               control={form.control}
               name="videoDescription"

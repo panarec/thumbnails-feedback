@@ -41,18 +41,18 @@ const TestPage: FC<TestPageProps> = ({ params }) => {
     return (
       <>
         <DashboardTitle customTitle={test.test_name} />
-        <div className="flex flex-row justify-between">
-          <Link href="/dashboard" className="flex flex-row items-center mb-3">
+        <div className="flex flex-row justify-between items-center mb-3">
+          <Link href="/dashboard" className="flex flex-row items-center">
             <ArrowLeftIcon />
             Back
           </Link>
-          <p className={`italic ${isActive ? 'text-green-600' : 'text-red-400'}`}>
+          <p className={`italic ${isActive ? 'text-green-600' : 'text-red-400'} text-xs`}>
             {isActive ? 'Active until: ' : 'Inactive from: '}
             {format(test.expiresAt, 'dd.MM.yyyy hh:mm aaa')}
           </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           {test.thumbnails.map((thumbnail) => (
             <ThumbnailItem key={thumbnail.id} thumbnail={thumbnail} />
           ))}

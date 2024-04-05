@@ -93,7 +93,7 @@ export const ReviewForm = ({ testId }: { testId: string }) => {
                   <RadioGroup
                     onValueChange={field.onChange}
                     defaultValue={field.value}
-                    className="grid grid-cols-2 gap-5"
+                    className="grid grid-cols-1 sm:grid-cols-2 gap-5"
                   >
                     {test.thumbnails.map((thumbnail, index) => (
                       <div key={thumbnail.id} className="flex flex-col gap-3">

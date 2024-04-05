@@ -28,7 +28,7 @@ const TestsList = () => {
   if (isLoading) {
     return (
       <>
-        <div className="flex flex-row gap-3">
+        <div className="flex flex-row gap-3 flex-wrap">
           <div className="flex flex-col space-y-3">
             <Skeleton className="h-[125px] w-[250px] rounded-xl" />
             <div className="space-y-2">
@@ -57,7 +57,7 @@ const TestsList = () => {
     );
   } else if (tests?.length) {
     return (
-      <div className="grid grid-cols-5 gap-5 mb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5 mb-10">
         {tests.map((item) => (
           <TestItem key={item.id} test={item} onDelete={handleDeleteItem} />
         ))}
@@ -66,7 +66,7 @@ const TestsList = () => {
   } else {
     return (
       <div className="w-full flex items-center gap-3 flex-col">
-        <h3 className="text-4xl flex justify-center items-center after:content-['\01F50D']  after:ml-2 ">
+        <h3 className=" text-xl sm:text-4xl flex justify-center items-center after:content-['\01F50D']  after:ml-2 ">
           No tests found
         </h3>
         <Link href="/new-test" className={buttonVariants()}>
