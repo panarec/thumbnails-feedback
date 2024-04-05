@@ -28,9 +28,6 @@ export async function GET(req: NextRequest, { params: { testId } }: { params: { 
     return NextResponse.redirect('/sign-in');
   }
 
-  console.log({ testId });
-  console.log({ userId: session.user.id });
-
   const result = await db.test.findFirst({
     where: {
       thumbnails: {
@@ -49,6 +46,9 @@ export async function GET(req: NextRequest, { params: { testId } }: { params: { 
         userId: {
           not: session.user.id,
         },
+        expiresAt: {
+          gte: new Date(),
+        },
       },
     },
     select: {
@@ -64,9 +64,6 @@ export async function GET(req: NextRequest, { params: { testId } }: { params: { 
       },
     },
   });
-
-  console.log('resultID', result?.id);
-  console.log('resultUserId', result?.userId);
 
   return NextResponse.json(result);
 }
@@ -90,7 +87,6 @@ export async function POST(req: NextRequest) {
   if (!body.comments) return NextResponse.json({ message: 'success' });
 
   const validComments = body.comments.filter((comment: any) => comment);
-  console.log('validComments', validComments)
 
   const commentResponse = await db.comment.createMany({
     data: validComments.map((comment: any) => ({

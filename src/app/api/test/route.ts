@@ -1,7 +1,9 @@
 import { formSchema } from '@/components/form/NewTestForm';
 import { authOptions } from '@/lib/auth';
 import { db } from '@/lib/db';
+import { add } from 'date-fns';
 import { getServerSession } from 'next-auth';
+import { now } from 'next-auth/client/_utils';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -21,7 +23,7 @@ export async function POST(request: Request): Promise<NextResponse> {
   const data = await db.test.create({
     data: {
       test_name: body.testName,
-      test_duration: body.testDuration,
+      expiresAt: new Date(add(Date.now(), { days: body.testDuration })),
       video_description: body.videoDescription,
       thumbnails: {
         createMany: {

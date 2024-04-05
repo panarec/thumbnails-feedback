@@ -5,11 +5,16 @@ import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
 
 const TestWithCommentsIdsAndVotesIds = Prisma.validator<Prisma.TestDefaultArgs>()({
-  include: {
+  select: {
+    id: true,
+    test_name: true,
+    expiresAt: true,
+    video_description: true,
+    createdAt: true,
     thumbnails: {
       select: {
-        id: true,
         thumbnail_url: true,
+        id: true,
         votes: {
           select: {
             id: true,
@@ -41,8 +46,9 @@ export async function GET() {
     select: {
       id: true,
       test_name: true,
-      test_duration: true,
+      expiresAt: true,
       video_description: true,
+      createdAt: true,
       thumbnails: {
         select: {
           thumbnail_url: true,

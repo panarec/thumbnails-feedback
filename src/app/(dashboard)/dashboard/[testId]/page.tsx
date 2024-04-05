@@ -1,11 +1,12 @@
 'use client';
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useTestDetail } from '@/hooks/useTest';
 import { Loading } from '@/components/ui/graphics/Loading';
 import { ThumbnailItem } from '@/components/ThumbnailItem';
 import Link from 'next/link';
 import { ArrowLeftIcon } from '@radix-ui/react-icons';
 import DashboardTitle from '@/components/DashboardTitle';
+import { add, format, isFuture } from 'date-fns';
 
 interface TestPageProps {
   params: {
@@ -15,6 +16,14 @@ interface TestPageProps {
 
 const TestPage: FC<TestPageProps> = ({ params }) => {
   const { test, error, isLoading } = useTestDetail(params.testId);
+  const [isActive, setIsActive] = useState(false);
+
+  useEffect(() => {
+    if (test) {
+      const isActive = isFuture(test.expiresAt);
+      setIsActive(isActive);
+    }
+  }, [test]);
 
   if (isLoading)
     return (
@@ -32,10 +41,17 @@ const TestPage: FC<TestPageProps> = ({ params }) => {
     return (
       <>
         <DashboardTitle customTitle={test.test_name} />
-        <Link href="/dashboard" className="flex flex-row items-center mb-3">
-          <ArrowLeftIcon />
-          Back
-        </Link>
+        <div className="flex flex-row justify-between">
+          <Link href="/dashboard" className="flex flex-row items-center mb-3">
+            <ArrowLeftIcon />
+            Back
+          </Link>
+          <p className={`italic ${isActive ? 'text-green-600' : 'text-red-400'}`}>
+            {isActive ? 'Active until: ' : 'Inactive from: '}
+            {format(test.expiresAt, 'dd.MM.yyyy hh:mm aaa')}
+          </p>
+        </div>
+
         <div className="grid grid-cols-2 gap-5">
           {test.thumbnails.map((thumbnail) => (
             <ThumbnailItem key={thumbnail.id} thumbnail={thumbnail} />

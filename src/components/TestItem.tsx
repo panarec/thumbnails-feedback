@@ -7,6 +7,7 @@ import { AspectRatio } from './ui/aspect-ratio';
 import Image from 'next/image';
 import { Button } from './ui/button';
 import { useSWRConfig } from 'swr';
+import { add, differenceInDays, isFuture } from 'date-fns';
 
 interface TestItemProps {
   test: TestWithCommentsIdsAndVotesIds;
@@ -17,6 +18,7 @@ export const TestItem: FC<TestItemProps> = ({ test, onDelete }) => {
   const [votesCount, setVotesCount] = useState(0);
   const [commentsCount, setCommentsCount] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
     if (test) {
@@ -24,13 +26,17 @@ export const TestItem: FC<TestItemProps> = ({ test, onDelete }) => {
       const comments = test?.thumbnails?.map((item) => item.comments.length);
       setVotesCount(votes.flat().reduce((a, b) => a + b, 0));
       setCommentsCount(comments.flat().reduce((a, b) => a + b, 0));
+      const isActive = isFuture(test.expiresAt);
+      setIsActive(isActive);
     }
   }, [test]);
 
   return (
     <Card
       key={test.id}
-      className="shadow-sm relative"
+      className={`relative w-full h-full bg-white rounded-xl shadow-md transition-all hover:shadow-lg border-2 border-primary  ${
+        isActive ? '' : 'opacity-40'
+      }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -42,6 +48,7 @@ export const TestItem: FC<TestItemProps> = ({ test, onDelete }) => {
           <TrashIcon className="text-destructive  w-5 h-5 " />
         </Button>
       )}
+
       <CardHeader>
         <CardTitle>{test.test_name}</CardTitle>
       </CardHeader>
@@ -52,7 +59,7 @@ export const TestItem: FC<TestItemProps> = ({ test, onDelete }) => {
               src={test.thumbnails[0].thumbnail_url}
               alt="thumbnail-preview-image"
               fill
-              className="rounded-md object-cover"
+              className="rounded-md object-cover shadow-md"
             />
           </AspectRatio>
           <AspectRatio ratio={16 / 9} className="w-full h-full">
@@ -60,7 +67,7 @@ export const TestItem: FC<TestItemProps> = ({ test, onDelete }) => {
               src={test.thumbnails[1].thumbnail_url}
               alt="thumbnail-preview-image"
               fill
-              className="rounded-md object-cover"
+              className="rounded-md object-cover shadow-md"
             />
           </AspectRatio>
         </div>
@@ -75,7 +82,7 @@ export const TestItem: FC<TestItemProps> = ({ test, onDelete }) => {
           </span>
           <span className="text-gray-500 flex flex-col items-center">
             <TimerIcon className="text-secondary" />
-            <span>{test.test_duration}</span>
+            <span>{differenceInDays(test.expiresAt, new Date()) + 1}</span>
           </span>
         </CardDescription>
       </CardContent>

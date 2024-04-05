@@ -9,7 +9,12 @@ import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 
 const TestWithCommentsAndVotes = Prisma.validator<Prisma.TestDefaultArgs>()({
-  include: {
+  select: {
+    id: true,
+    test_name: true,
+    expiresAt: true,
+    createdAt: true,
+    video_description: true,
     thumbnails: {
       select: {
         id: true,
@@ -54,7 +59,8 @@ export async function GET(req: NextRequest, { params: { testId } }: { params: { 
     select: {
       id: true,
       test_name: true,
-      test_duration: true,
+      expiresAt: true,
+      createdAt: true,
       video_description: true,
       thumbnails: {
         select: {
@@ -127,6 +133,6 @@ export async function DELETE(req: NextRequest, { params: { testId } }: { params:
 
     s3.send(deleteCommand);
   });
-  
+
   return NextResponse.json(result);
 }

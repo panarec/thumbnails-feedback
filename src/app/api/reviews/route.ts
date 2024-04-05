@@ -1,6 +1,5 @@
 import { authOptions } from '@/lib/auth';
 import { db } from '@/lib/db';
-import { Prisma } from '@prisma/client';
 import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -30,6 +29,9 @@ export const GET = async (req: NextRequest) => {
       NOT: {
         userId: session.user.id,
       },
+      expiresAt: {
+        gte: new Date(),
+      },
     },
   });
 
@@ -46,6 +48,9 @@ export const GET = async (req: NextRequest) => {
       },
       NOT: {
         userId: session.user.id,
+      },
+      expiresAt: {
+        gte: new Date(),
       },
     },
     select: {
