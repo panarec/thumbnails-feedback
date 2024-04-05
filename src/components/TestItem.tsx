@@ -9,6 +9,17 @@ import { Button } from './ui/button';
 import { useSWRConfig } from 'swr';
 import { add, differenceInDays, isFuture } from 'date-fns';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from './ui/alert-dialog';
 
 interface TestItemProps {
   test: TestWithCommentsIdsAndVotesIds;
@@ -43,20 +54,32 @@ export const TestItem: FC<TestItemProps> = ({ test, onDelete }) => {
         onMouseLeave={() => setIsHovered(false)}
       >
         {isHovered && (
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div className="absolute top-5 right-5 bg-primary text-white rounded-full p-2 m-0 transition-all ease-in-out hover:cursor-pointer w-auto h-auto hover:scale-90">
-                <TrashIcon className="text-white w-5 h-5 " />
-              </div>
-            </TooltipTrigger>
-            <TooltipContent>Delete</TooltipContent>
-          </Tooltip>
-          // {/* <Button
-          //   className="absolute right-5 top-5 bg-red-100 hover:bg-red-100 hover:scale-110 rounded-full p-2 m-0 transition-all hover:cursor-pointer w-auto h-auto"
-          //   onClick={() => onDelete(test.id)}
-          // >
-          //   <TrashIcon className="text-destructive  w-5 h-5 " />
-          // </Button> */}
+          <AlertDialog>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <AlertDialogTrigger asChild>
+                  <div className="absolute top-5 right-5 bg-primary text-white rounded-full p-2 m-0 transition-all ease-in-out hover:cursor-pointer w-auto h-auto hover:scale-90">
+                    <TrashIcon className="text-white w-5 h-5 " />
+                  </div>
+                </AlertDialogTrigger>
+              </TooltipTrigger>
+              <TooltipContent>Delete</TooltipContent>
+            </Tooltip>
+
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete your test and remove your data from our
+                  servers.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>No</AlertDialogCancel>
+                <AlertDialogAction onClick={() => onDelete(test.id)}>Yes</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         )}
 
         <CardHeader>
