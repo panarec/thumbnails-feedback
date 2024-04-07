@@ -22,9 +22,17 @@ const loggedUserNav: NavItem[] = [
 
 const guestNav: NavItem[] = [
   {
-    title: 'Home',
-    href: '/',
+    title: 'How it works',
+    href: '/#how-it-works',
   },
+  {
+    title: 'Pricing',
+    href: '/#pricing',
+  },
+  {
+    title: 'FAQ',
+    href: '/#faq',
+  }
 ];
 
 export async function getSiteConfig() {
