@@ -1,3 +1,4 @@
+import { Footer } from '@/components/Footer';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { TypographyH1 } from '@/components/ui/h1';
@@ -23,8 +24,7 @@ export default function Home() {
               </span>
             </TypographyH1>
             <p className="text-lg opacity-80 leading-relaxed">
-              Get feedback before publishing your content and avoid mistakes that could cost you
-              views.
+              Get feedback before publishing your content and avoid mistakes that could cost you views.
             </p>
             <Link href="/sign-up" className={buttonVariants({ size: 'lg' })}>
               Get Started
@@ -76,6 +76,7 @@ export default function Home() {
           </Card>
         </div>
       </div>
+      {/* <Footer /> */}
     </>
   );
 }

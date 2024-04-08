@@ -7,6 +7,9 @@ export interface SiteConfig {
   description: string;
   mainNav: NavItem[];
   links: {};
+  socials?: {
+    youtube?: string;
+  };
 }
 
 const loggedUserNav: NavItem[] = [
@@ -32,25 +35,30 @@ const guestNav: NavItem[] = [
   {
     title: 'FAQ',
     href: '/#faq',
-  }
+  },
 ];
 
 export async function getSiteConfig() {
   const session = await getServerSession(authOptions);
 
+  const config = {
+    name: 'Thumbnail Feedbacks',
+    description: 'Get feedback before going live',
+    links: {},
+    socials: {
+      youtube: 'https://www.youtube.com/channel/UChu9E6KNDxbyS8BiVRyFrYA',
+    },
+  };
+
   if (session?.user) {
     return {
-      name: 'Thumbnail Feedbacks',
-      description: '',
+      ...config,
       mainNav: loggedUserNav,
-      links: {},
     };
   } else {
     return {
-      name: 'Thumbnail Feedbacks',
-      description: '',
+      ...config,
       mainNav: guestNav,
-      links: {},
     };
   }
 }

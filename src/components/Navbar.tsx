@@ -12,7 +12,6 @@ const Navbar = async () => {
   const siteConfig = await getSiteConfig();
   const session = await getServerSession(authOptions);
 
-  console.log(session);
   return (
     <Header>
       <MainNav siteConfig={siteConfig} />
@@ -20,7 +19,7 @@ const Navbar = async () => {
       {session?.user ? (
         <SideNav username={session.user.username} />
       ) : (
-        <Link href="/sign-in" className={buttonVariants()}>
+        <Link href="/sign-in" scroll={true} className={buttonVariants()}>
           Sign in
         </Link>
       )}
