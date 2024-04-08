@@ -15,8 +15,6 @@ export const Footer = async () => {
               <span className="font-extrabold tracking-tight text-base md:text-lg">{siteConfig.name}</span>
             </Link>
             <p className="mt-3 text-sm text-base-content/80 leading-relaxed">
-              {siteConfig.description}
-              <br />
               Copyrigth © {new Date().getFullYear()} - All rights reserved.
             </p>
             <div className="mt-10">

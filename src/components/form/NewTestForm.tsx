@@ -133,7 +133,7 @@ const NewTestForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="mb-24" autoComplete='off'>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <FormField
             control={form.control}
@@ -153,7 +153,7 @@ const NewTestForm = () => {
             name="testDuration"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Test duration:</FormLabel>
+                <FormLabel>Test duration&#40;days&#41;:</FormLabel>
                 <FormControl>
                   <Input type="number" placeholder="Duration in days" {...field} />
                 </FormControl>

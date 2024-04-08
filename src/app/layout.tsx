@@ -25,7 +25,7 @@ export default function RootLayout({
         className={`${poppins.className}  min-h-[calc(100vh - 200px)] bg-white text-slate-900 antialiased dark:bg-slate-900 dark:text-slate-50 w-full flex flex-col`}
       >
         <Navbar />
-        <main className=" flex flex-col md:container ">{children}</main>
+        <main className="h-full">{children}</main>
         <Toaster />
         <Footer />
       </body>
