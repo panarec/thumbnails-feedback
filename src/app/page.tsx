@@ -1,8 +1,9 @@
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { TypographyH1 } from '@/components/ui/h1';
 import { TypographyH3 } from '@/components/ui/h3';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Home() {
   return (
@@ -22,12 +23,15 @@ export default function Home() {
               </span>
             </TypographyH1>
             <p className="text-lg opacity-80 leading-relaxed">
-              Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+              Get feedback before publishing your content and avoid mistakes that could cost you
+              views.
             </p>
-            <Button className="w-44">Get Started</Button>
+            <Link href="/sign-up" className={buttonVariants({ size: 'lg' })}>
+              Get Started
+            </Link>
           </div>
           <div className="relative max-md:-m-4 lg:w-full">
-            <Image src="/landing.png" alt="Hero" width={1080} height={1080} />
+            <Image src="/landing2.png" alt="Hero" width={1080} height={1080} />
           </div>
         </section>
       </div>
