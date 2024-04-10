@@ -2,7 +2,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './
 
 export const FAQSection = () => {
   return (
-    <section className="overflow-hidden scroll-m-16 bg-white" id="pricing">
+    <section className="overflow-hidden scroll-m-16 bg-white" id="faq">
       <div className="py-24 px-8 max-w-7xl mx-auto ">
         <div className="flex flex-col md:flex-row gap-12">
           <div className="flex flex-col text-left basis-1/2">

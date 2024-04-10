@@ -14,10 +14,6 @@ export interface SiteConfig {
 
 const loggedUserNav: NavItem[] = [
   {
-    title: 'Home',
-    href: '/',
-  },
-  {
     title: 'Dashboard',
     href: '/dashboard',
   },

@@ -2,10 +2,7 @@ import { FAQSection } from '@/components/FAQSection';
 import { HIWSection } from '@/components/HIWSection';
 import { PricingSection } from '@/components/PricingSection';
 import { buttonVariants } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { TypographyH1 } from '@/components/ui/h1';
-import { TypographyH3 } from '@/components/ui/h3';
-import { CheckIcon } from '@radix-ui/react-icons';
 import Image from 'next/image';
 import Link from 'next/link';
 

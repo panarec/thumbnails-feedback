@@ -26,20 +26,15 @@ export const Footer = async () => {
           </div>
           <div className="flex-grow flex flex-wrap md:pl-24 -mb-10 md:mt-0 mt-10 text-center md:text-left">
             <FooterLinksBlock header="Links">
-              <Link href="/about">About</Link>
               <Link href="/contact">Contact</Link>
-              <Link href="/terms">Terms</Link>
-              <Link href="/privacy">Privacy</Link>
+              <Link href="/#faq">FAQ</Link>
+              <Link href="/#pricing">Pricing</Link>
+              <Link href="/sign-in">Signin</Link>
+              <Link href="/sign-up">Signup</Link>
             </FooterLinksBlock>
             <FooterLinksBlock header="Legal">
-              <Link href="/docs">Docs</Link>
-              <Link href="/blog">Blog</Link>
-              <Link href="/faq">FAQ</Link>
-            </FooterLinksBlock>
-            <FooterLinksBlock header="More">
-              <Link href="/support">Support</Link>
-              <Link href="/pricing">Pricing</Link>
-              <Link href="/testimonials">Testimonials</Link>
+              <Link href="/terms">Terms</Link>
+              <Link href="/privacy-policy">Privacy</Link>
             </FooterLinksBlock>
           </div>
         </div>
