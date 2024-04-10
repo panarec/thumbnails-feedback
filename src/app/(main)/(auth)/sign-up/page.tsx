@@ -1,11 +1,19 @@
-import SignUpForm from "@/components/form/SignUpForm";
+import SignUpForm from '@/components/form/SignUpForm';
+import { getServerSession } from 'next-auth';
+import { redirect } from 'next/navigation';
 
-const SignUpPage = () => {
-    return (
-        <div>
-        <SignUpForm />
-        </div>
-    );
-}
+const SignUpPage = async () => {
+  const session = await getServerSession();
+
+  if (session) {
+    redirect('/dashboard');
+  }
+
+  return (
+    <div>
+      <SignUpForm />
+    </div>
+  );
+};
 
 export default SignUpPage;

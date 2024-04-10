@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from './dropdown-menu';
 import { signOut } from 'next-auth/react';
+import Link from 'next/link';
 
 export const SideNav = async ({ username }: { username: string }) => {
   return (
@@ -25,7 +26,13 @@ export const SideNav = async ({ username }: { username: string }) => {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Welcome, {username}!</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Settings</DropdownMenuItem>
+          <Link href="/dashboard">
+            <DropdownMenuItem>Dashboard</DropdownMenuItem>
+          </Link>
+          <Link href="/settings">
+            <DropdownMenuItem>Settings</DropdownMenuItem>
+          </Link>
+
           <DropdownMenuItem>Support</DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem

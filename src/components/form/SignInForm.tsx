@@ -11,7 +11,6 @@ import { Input } from '@/components/ui/input';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/components/ui/use-toast';
-import { useState } from 'react';
 
 const FormSchema = z.object({
   username: z.string().min(2, {
