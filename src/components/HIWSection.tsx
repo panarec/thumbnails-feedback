@@ -10,7 +10,7 @@ export const HIWSection = () => {
       >
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row gap-8 md:gap-16">
           <video
-            src="./untitled.mp4"
+            src="/video_1.mp4"
             className="rounded-3xl aspect-video w-full sm:w-[20rem] lg:w-[30rem] border-slate-300 border-2 md:border-4"
             autoPlay
             muted
@@ -46,7 +46,7 @@ export const HIWSection = () => {
             </Link>
           </div>
           <video
-            src="./untitled3.mp4"
+            src="/video_3.mp4"
             className=" order-1 rounded-3xl aspect-video w-full sm:w-[20rem] lg:w-[30rem] border-slate-300 border-2 md:border-4"
             autoPlay
             muted
@@ -61,7 +61,7 @@ export const HIWSection = () => {
       >
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row gap-8 md:gap-16">
           <video
-            src="./untitled2.mp4"
+            src="/video_2.mp4"
             className="rounded-3xl aspect-video w-full sm:w-[20rem] lg:w-[30rem] border-slate-300 border-2 md:border-4"
             autoPlay
             muted
