@@ -9,10 +9,10 @@ export const PricingSection = () => {
       <section className="overflow-hidden scroll-m-16 bg-slate-100" id="pricing">
         <div className="py-24 px-8 max-w-5xl mx-auto">
           <div className="flex flex-col text-center w-full mb-20">
-            <h2 className="max-w-xl font-bold text-3xl lg:text-5xl tracking-tight mb-8 mx-auto ">Lorem ipsum</h2>
+            <h2 className="max-w-xl font-bold text-3xl lg:text-5xl tracking-tight mb-8 mx-auto ">Beat the algorithm</h2>
             <div className="opacity-70 max-w-md mx-auto">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
-              dolore magna aliqua.
+              You have only few impressions that may decide the fate of your video. Publish with confidence of knowing
+              that your thumbnail is the best it can be.
             </div>
           </div>
           <div className="relative flex justify-center flex-col lg:flex-row items-center lg:items-stretch gap-8">
@@ -65,7 +65,7 @@ export const PricingSection = () => {
                 </div>
               </div>
             </div>
-            <div className="relative w-full max-w-lg">
+            <div className="relative w-full max-w-lg shadow-xl">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
                 <span className="inline-flex px-2 rounded-full text-white text-xs font-medium border-0 bg-primary whitespace-nowrap">
                   Professional&apos; s choice
@@ -83,6 +83,9 @@ export const PricingSection = () => {
                   <div className="flex flex-col justify-end mb-[4px] text-4xl sm:text-5xl">$1.99</div>
                   <div className="flex flex-col justify-end mb-[8px]">
                     <p className="text-xs opacity-60 uppercase font-semibold">/mo</p>
+                  </div>
+                  <div className="flex flex-col justify-center">
+                    <span className="bg-emerald-500 text-white rounded-full px-2 ml-5">Save 80%</span>
                   </div>
                 </div>
                 <ul className="space-y-2.5 leading-relaxed text-base flex-1">
@@ -105,7 +108,7 @@ export const PricingSection = () => {
                 </ul>
                 <div className="space-y-2">
                   <Link href="/sign-up" className={buttonVariants({ size: 'lg' })}>
-                    I want to be PRO
+                    I don&apos;t want limits
                     <ArrowRightIcon className="w-5 h-5 ml-2" />
                   </Link>
                 </div>

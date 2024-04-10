@@ -52,10 +52,6 @@ export const ReviewForm = ({ testId }: { testId: string }) => {
     },
   });
 
-  useEffect(() => {
-    console.log(form.formState.errors);
-  }, [form.formState.errors]);
-
   const onSubmit = (data: z.infer<typeof reviewSchema>) => {
     fetch(`/api/review/${testId}`, {
       method: 'POST',

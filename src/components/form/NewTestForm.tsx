@@ -133,7 +133,7 @@ const NewTestForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="mb-24" autoComplete='off'>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="mb-24">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <FormField
             control={form.control}

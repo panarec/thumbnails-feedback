@@ -1,6 +1,5 @@
 import { S3Client, S3ClientConfig } from '@aws-sdk/client-s3';
 
-console.log(process.env.S3_ACCESS_KEY_ID);
 export const s3 = new S3Client({
   apiVersion: '2006-03-01',
   credentials: {

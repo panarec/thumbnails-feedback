@@ -11,19 +11,27 @@ export const FAQSection = () => {
           </div>
           <Accordion type="single" collapsible className="basis-1/2">
             <AccordionItem value="item-1">
-              <AccordionTrigger>Is it accessible?</AccordionTrigger>
-              <AccordionContent>Yes. It adheres to the WAI-ARIA design pattern.</AccordionContent>
+              <AccordionTrigger>Lorem ipsum</AccordionTrigger>
+              <AccordionContent>
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repellat placeat maiores ipsa dignissimos, ad
+                consectetur corporis reprehenderit suscipit error illo praesentium! Atque eligendi totam officiis
+                corrupti, quae veritatis aliquam sit.
+              </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-2">
-              <AccordionTrigger>Is it styled?</AccordionTrigger>
+              <AccordionTrigger>Lorem ipsum</AccordionTrigger>
               <AccordionContent>
-                Yes. It comes with default styles that matches the other components&apos; aesthetic.
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad repudiandae explicabo odit quisquam
+                architecto aspernatur, deserunt temporibus quod laudantium recusandae sint, aliquid illum dolore
+                suscipit consequatur tenetur, doloremque enim sunt.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-3">
-              <AccordionTrigger>Is it animated?</AccordionTrigger>
+              <AccordionTrigger>Lorem ipsum</AccordionTrigger>
               <AccordionContent>
-                Yes. It&apos;s animated by default, but you can disable it if you prefer.
+                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolores nemo repudiandae enim ullam minima,
+                sint ipsa accusantium laborum unde animi eum quas, illum, quaerat ab ducimus blanditiis amet repellat
+                totam?
               </AccordionContent>
             </AccordionItem>
           </Accordion>
