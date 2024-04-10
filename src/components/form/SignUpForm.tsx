@@ -9,6 +9,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { stripe } from '@/lib/stripe';
 
 const FormSchema = z
   .object({
@@ -49,6 +50,7 @@ const SignUpForm = () => {
     resolver: zodResolver(FormSchema),
     defaultValues: {
       username: '',
+      email: '',
       password: '',
     },
   });
@@ -61,13 +63,14 @@ const SignUpForm = () => {
       },
       body: JSON.stringify(data),
     });
-    if (response.ok) {
+    if (response.ok && response.status === 200 || response.status === 201) {
       router.push('/sign-in');
     } else {
       const error = await response.json();
-      form.setError('username', {
+      console.log(error);
+      form.setError(error.body.field, {
         type: 'server',
-        message: error.error,
+        message: error.body.error,
       });
     }
   };

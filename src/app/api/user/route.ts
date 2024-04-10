@@ -2,6 +2,7 @@ import { db } from '@/lib/db';
 import { hash } from 'bcrypt';
 import { z } from 'zod';
 import { NextResponse } from 'next/server';
+import { stripe } from '@/lib/stripe';
 
 const userRegistrationSchema = z.object({
   username: z
@@ -41,7 +42,10 @@ export const POST = async (req: Request) => {
     });
 
     if (existingUser) {
-      return NextResponse.json({ body: { error: 'User already exists' } });
+      return NextResponse.json(
+        { body: { error: 'User with this email already exists', field: 'email' } },
+        { status: 400 }
+      );
     }
 
     // Check if username is already taken
@@ -52,10 +56,15 @@ export const POST = async (req: Request) => {
     });
 
     if (existingUsername) {
-      return NextResponse.json({ body: { error: 'Username already taken' } });
+      return NextResponse.json({ body: { error: 'Username already taken', field: 'username' } }, { status: 400 });
     }
 
     const hashedPassword = await hash(password, 10);
+
+    const stripeRes = await stripe.customers.create({
+      email: email,
+    });
+    console.log(stripeRes);
 
     const newUser = await db.user.create({
       data: {
@@ -70,6 +79,6 @@ export const POST = async (req: Request) => {
     return NextResponse.json({ user, message: 'User created' }, { status: 201 });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ body: { error: 'Something went wrong' } });
+    return NextResponse.json({ body: { error: 'Something went wrong' } }, { status: 500 });
   }
 };

@@ -3,6 +3,7 @@ import { HIWSection } from '@/components/HIWSection';
 import { PricingSection } from '@/components/PricingSection';
 import { buttonVariants } from '@/components/ui/button';
 import { TypographyH1 } from '@/components/ui/h1';
+import { RocketIcon } from '@radix-ui/react-icons';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -26,7 +27,7 @@ export default function Home() {
             Get feedback before publishing your content and avoid mistakes that could cost you views.
           </p>
           <Link href="/sign-up" className={buttonVariants({ size: 'lg' })}>
-            Get Started
+            Start getting feedback <RocketIcon className="w-4 h-4 ml-2" />
           </Link>
         </div>
         <div className="relative max-md:-m-4 lg:w-full">

@@ -76,16 +76,16 @@ export const PricingSection = () => {
                 <div className="flex flex-wrap gap-2">
                   <div className="flex flex-col justify-end mb-[4px] text-lg ">
                     <p className="relative">
-                      <span className="absolute bg-slate-900 h-[1.5px] inset-x-0 top-[53%]"></span>
-                      <span className="opacity-80">$10</span>
+                      <span className="absolute bg-slate-900 h-[1.5px] inset-x-0 top-[50%]"></span>
+                      <span className="opacity-80">$50</span>
                     </p>
                   </div>
-                  <div className="flex flex-col justify-end mb-[4px] text-4xl sm:text-5xl">$1.99</div>
-                  <div className="flex flex-col justify-end mb-[8px]">
-                    <p className="text-xs opacity-60 uppercase font-semibold">/mo</p>
-                  </div>
+                  <div className="flex flex-col justify-end mb-[4px] text-4xl sm:text-5xl">$9.99</div>
                   <div className="flex flex-col justify-center">
                     <span className="bg-emerald-500 text-white rounded-full px-2 ml-5">Save 80%</span>
+                  </div>
+                  <div>
+                    <p className='italic'>One time payment</p>
                   </div>
                 </div>
                 <ul className="space-y-2.5 leading-relaxed text-base flex-1">
