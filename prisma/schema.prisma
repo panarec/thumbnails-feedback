@@ -21,6 +21,7 @@ model User {
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  tier      String  @default("free")
   comments Comment[]
   tests     Test[]
   votes     Vote[]

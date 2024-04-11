@@ -2,8 +2,11 @@ import { ArrowRightIcon, CheckIcon, InfoCircledIcon, MinusIcon } from '@radix-ui
 import Link from 'next/link';
 import { buttonVariants } from './ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
+import { getServerSession } from 'next-auth';
 
-export const PricingSection = () => {
+export const PricingSection = async () => {
+  const session = await getServerSession();
+
   return (
     <>
       <section className="overflow-hidden scroll-m-16 bg-slate-100" id="pricing">
@@ -85,7 +88,7 @@ export const PricingSection = () => {
                     <span className="bg-emerald-500 text-white rounded-full px-2 ml-5">Save 80%</span>
                   </div>
                   <div>
-                    <p className='italic'>One time payment</p>
+                    <p className="italic">One time payment</p>
                   </div>
                 </div>
                 <ul className="space-y-2.5 leading-relaxed text-base flex-1">
@@ -107,10 +110,17 @@ export const PricingSection = () => {
                   </li>
                 </ul>
                 <div className="space-y-2">
-                  <Link href="/sign-up" className={buttonVariants({ size: 'lg' })}>
-                    I don&apos;t want limits
-                    <ArrowRightIcon className="w-5 h-5 ml-2" />
-                  </Link>
+                  {session ? (
+                    <Link href="/dashboard" className={buttonVariants({ size: 'lg' })}>
+                      I don&apos;t want limits
+                      <ArrowRightIcon className="w-5 h-5 ml-2" />
+                    </Link>
+                  ) : (
+                    <Link href="/sign-up?plan=premium" className={buttonVariants({ size: 'lg' })}>
+                      I don&apos;t want limits
+                      <ArrowRightIcon className="w-5 h-5 ml-2" />
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>

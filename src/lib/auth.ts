@@ -44,6 +44,7 @@ export const authOptions: NextAuthOptions = {
           id: user.id,
           username: user.username,
           email: user.email,
+          tier: user.tier,
         };
       },
     }),
@@ -51,12 +52,17 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        return { ...token, username: user.username, id: user.id};
+        return { ...token, username: user.username, id: user.id, tier: user.tier };
       }
       return token;
     },
     async session({ session, token }) {
-      return { ...session, user: { ...session.user, username: token.username, id: token.id } };
+      const user = await db.user.findUnique({
+        where: {
+          id: token.id as string,
+        },
+      });
+      return { ...session, user: { ...session.user, username: token.username, id: token.id, tier: user?.tier } };
     },
   },
 };

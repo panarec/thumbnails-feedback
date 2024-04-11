@@ -17,7 +17,7 @@ const Navbar = async () => {
       <MainNav siteConfig={siteConfig} />
       <MobileNav siteConfig={siteConfig} />
       {session?.user ? (
-        <SideNav username={session.user.username} />
+        <SideNav session={session} />
       ) : (
         <Link href="/sign-in" scroll={true} className={buttonVariants()}>
           Sign in

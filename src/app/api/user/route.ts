@@ -2,7 +2,6 @@ import { db } from '@/lib/db';
 import { hash } from 'bcrypt';
 import { z } from 'zod';
 import { NextResponse } from 'next/server';
-import { stripe } from '@/lib/stripe';
 
 const userRegistrationSchema = z.object({
   username: z
@@ -60,11 +59,6 @@ export const POST = async (req: Request) => {
     }
 
     const hashedPassword = await hash(password, 10);
-
-    const stripeRes = await stripe.customers.create({
-      email: email,
-    });
-    console.log(stripeRes);
 
     const newUser = await db.user.create({
       data: {

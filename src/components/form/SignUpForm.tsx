@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { stripe } from '@/lib/stripe';
 
 const FormSchema = z
@@ -46,6 +46,7 @@ const FormSchema = z
 
 const SignUpForm = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -63,11 +64,30 @@ const SignUpForm = () => {
       },
       body: JSON.stringify(data),
     });
-    if (response.ok && response.status === 200 || response.status === 201) {
+    if ((response.ok && response.status === 200) || response.status === 201) {
+      const plan = searchParams.get('plan');
+      if (plan && plan === 'premium') {
+        try {
+          const stripeSessionRes = await fetch('/api/checkout', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ plan, email: data.email }),
+          });
+          const stripeSession = await stripeSessionRes.json();
+          if (stripeSession.url) {
+            router.push(stripeSession.url);
+          }
+        } catch (error) {
+          console.error(error); // handle error
+        }
+
+        return;
+      }
       router.push('/sign-in');
     } else {
       const error = await response.json();
-      console.log(error);
       form.setError(error.body.field, {
         type: 'server',
         message: error.body.error,
