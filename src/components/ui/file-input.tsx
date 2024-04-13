@@ -21,8 +21,8 @@ interface FileWithUrl {
 export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {
   control?: any;
   index?: number;
-  formReseted?: boolean;
-  setFormReseted?: (value: boolean) => void;
+  formreseted?: boolean;
+  setformreseted?: (value: boolean) => void;
 }
 
 const FileInput = forwardRef<HTMLInputElement, InputProps>(({ className, ...props }, ref) => {
@@ -144,12 +144,12 @@ const FileInput = forwardRef<HTMLInputElement, InputProps>(({ className, ...prop
   }, [selectedFile, formState]);
 
   useEffect(() => {
-    if (props.formReseted) {
+    if (props.formreseted) {
       setPreview(undefined);
       setSelectedFile(undefined);
-      props.setFormReseted && props.setFormReseted(false);
+      props.setformreseted && props.setformreseted(false);
     }
-  }, [props.formReseted]);
+  }, [props.formreseted]);
 
   return (
     <label

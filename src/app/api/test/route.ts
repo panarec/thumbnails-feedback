@@ -20,6 +20,22 @@ export async function POST(request: Request): Promise<NextResponse> {
     return NextResponse.redirect('/sign-in');
   }
 
+  const user = await db.user.findUnique({
+    where: {
+      id: session.user.id,
+    },
+    select: {
+      tests: true,
+      tier: true,
+    },
+  });
+
+  if (user?.tier === 'free' && user?.tests.length >= 3) {
+    return NextResponse.json({
+      error: 'You have reached the maximum number of tests for your tier',
+    });
+  }
+
   const data = await db.test.create({
     data: {
       test_name: body.testName,

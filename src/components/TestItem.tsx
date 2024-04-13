@@ -127,11 +127,13 @@ export const TestItem: FC<TestItemProps> = ({ test, onDelete }) => {
               <TooltipTrigger asChild>
                 <span className="text-gray-500 flex flex-col items-center">
                   <TimerIcon className="text-secondary" />
-                  <span>{(Math.max(differenceInDays(test.expiresAt, new Date()) + 1), 0)}</span>
+                  <span>{Math.max(differenceInDays(test.expiresAt, new Date()) + 1, 0)}</span>
                 </span>
               </TooltipTrigger>
               <TooltipContent>
-                {isActive ? `Remains active: ${differenceInDays(test.expiresAt, new Date()) + 1} day(s)` : 'Test expired'}
+                {isActive
+                  ? `Remains active: ${differenceInDays(test.expiresAt, new Date()) + 1} day(s)`
+                  : 'Test expired'}
               </TooltipContent>
             </Tooltip>
           </CardDescription>

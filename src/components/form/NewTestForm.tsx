@@ -11,10 +11,12 @@ import { Button } from '@/components/ui/button';
 import ImageUpload from '../ui/image-upload';
 import { useS3Upload } from '@/hooks/use-s3-upload';
 import Link from 'next/link';
-import { toast, useToast } from '../ui/use-toast';
+import { useToast } from '../ui/use-toast';
 import { useState } from 'react';
-import { Test } from '@prisma/client';
 import { CreateTestResponse } from '@/app/api/test/route';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '../ui/dialog';
+import { set } from 'date-fns';
+import { UpgradeButton } from '../ui/UpgradeButton';
 
 export const formSchema = z.object({
   testName: z.string().min(3, 'Test name must contain at least 3 character(s)').max(100),
@@ -49,7 +51,8 @@ const NewTestForm = () => {
   const { s3Upload } = useS3Upload();
   const { toast } = useToast();
   const [createTestResponse, setCreateTestResponse] = useState<CreateTestResponse | null>(null);
-  const [formReseted, setFormReseted] = useState<boolean>(false);
+  const [formreseted, setformreseted] = useState<boolean>(false);
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -94,6 +97,14 @@ const NewTestForm = () => {
         throw new Error('Failed to create test');
       }
 
+      const body: any = await response.json();
+
+      if (body?.error) {
+        console.log(body.error);
+        setOpenDialog(true);
+        return;
+      }
+
       const responseData = (await response.json()) as CreateTestResponse;
       setCreateTestResponse(responseData);
     } catch (error) {
@@ -128,80 +139,94 @@ const NewTestForm = () => {
 
   const discardForm = () => {
     form.reset();
-    setFormReseted(true);
+    setformreseted(true);
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="mb-24">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <FormField
-            control={form.control}
-            name="testName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Test name:</FormLabel>
-                <FormControl>
-                  <Input placeholder="Name for this test unit" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="testDuration"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Test duration&#40;days&#41;:</FormLabel>
-                <FormControl>
-                  <Input type="number" placeholder="Duration in days" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          {testItems.map((item, index) => (
-            <ImageUpload
-              id={item.id}
-              index={index}
-              key={index}
-              formReseted={formReseted}
-              setFormReseted={setFormReseted}
-            />
-          ))}
-          <div className="sm:col-span-2">
+    <>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="mb-24">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <FormField
               control={form.control}
-              name="videoDescription"
+              name="testName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Video description &#40;optional&#41;:</FormLabel>
+                  <FormLabel>Test name:</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Describe content of this video" {...field} />
+                    <Input placeholder="Name for this test unit" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="testDuration"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Test duration&#40;days&#41;:</FormLabel>
+                  <FormControl>
+                    <Input type="number" placeholder="Duration in days" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {testItems.map((item, index) => (
+              <ImageUpload
+                id={item.id}
+                index={index}
+                key={index}
+                formreseted={formreseted}
+                setformreseted={setformreseted}
+              />
+            ))}
+            <div className="sm:col-span-2">
+              <FormField
+                control={form.control}
+                name="videoDescription"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Video description &#40;optional&#41;:</FormLabel>
+                    <FormControl>
+                      <Textarea placeholder="Describe content of this video" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
           </div>
-        </div>
-        <div className="flex flex-row gap-3">
-          <Button type="submit" className="my-5 bg-primary" disabled={form.formState.isSubmitting}>
-            {form.formState.isSubmitting ? 'Creating...' : 'Create'}
-          </Button>
-          <Button
-            type="button"
-            className="my-5"
-            variant="outline"
-            onClick={discardForm}
-            disabled={form.formState.isSubmitting}
-          >
-            Discard
-          </Button>
-        </div>
-      </form>
-    </Form>
+          <div className="flex flex-row gap-3">
+            <Button type="submit" className="my-5 bg-primary" disabled={form.formState.isSubmitting}>
+              {form.formState.isSubmitting ? 'Creating...' : 'Create'}
+            </Button>
+            <Button
+              type="button"
+              className="my-5"
+              variant="outline"
+              onClick={discardForm}
+              disabled={form.formState.isSubmitting}
+            >
+              Discard
+            </Button>
+          </div>
+        </form>
+      </Form>
+      <Dialog onOpenChange={setOpenDialog} open={openDialog}>
+        <DialogContent>
+          <DialogHeader className='gap-5'>
+            <DialogTitle className="text-5xl after:content-['\01F627'] after:ml-2">Oooops</DialogTitle>
+            <DialogDescription>
+              It looks like you have reached the maximum number of tests for your tier. Please upgrade your account to
+              create more tests.
+            </DialogDescription>
+          </DialogHeader>
+          <UpgradeButton>I don&apos;t want limits anymore!</UpgradeButton>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 
