@@ -73,7 +73,12 @@ const SignUpForm = () => {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ plan, email: data.email }),
+            body: JSON.stringify({
+              plan,
+              email: data.email,
+              successUrl: `${window.location.origin}/dashboard`,
+              cancelUrl: `${window.location.origin}/dashboard`,
+            }),
           });
           const stripeSession = await stripeSessionRes.json();
           if (stripeSession.url) {
