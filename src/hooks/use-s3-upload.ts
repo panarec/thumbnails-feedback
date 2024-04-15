@@ -10,6 +10,7 @@ interface UseS3UploadReturn {
 }
 
 const uploadFile = async (file: File) => {
+  console.log('file', file);
   try {
     const checksum = await computeSHA256(file);
 

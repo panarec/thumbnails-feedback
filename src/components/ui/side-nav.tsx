@@ -21,7 +21,6 @@ export const SideNav = ({ session }: { session: any }) => {
 
   useEffect(() => {
     clientSession.then((ses: any) => {
-      console.log({ ses });
       setIsPremium(ses?.user.tier === 'premium');
     });
   }, [clientSession]);

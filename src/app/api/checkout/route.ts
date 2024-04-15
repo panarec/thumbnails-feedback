@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export const POST = async (req: NextRequest) => {
   const data = await req.json();
+  console.log(data);
   let session;
   try {
     session = await stripe.checkout.sessions.create({
@@ -14,8 +15,8 @@ export const POST = async (req: NextRequest) => {
           quantity: 1,
         },
       ],
-      success_url: `${process.env.URL}/dashboard`,
-      cancel_url: `${process.env.URL}/dashboard`,
+      success_url: data.successUrl,
+      cancel_url: data.cancelUrl,
       customer_email: data.email,
     });
   } catch (error) {

@@ -1,8 +1,16 @@
 import { getSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Button } from './button';
 
-export const UpgradeButton = ({ children }: { children: string }) => {
+export const UpgradeButton = ({
+  children,
+  successUrl,
+  cancelUrl,
+}: {
+  children: string;
+  successUrl: string;
+  cancelUrl: string;
+}) => {
   const router = useRouter();
 
   const handleClick = async () => {
@@ -14,7 +22,7 @@ export const UpgradeButton = ({ children }: { children: string }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email: session.user.email }),
+        body: JSON.stringify({ email: session.user.email, successUrl, cancelUrl}),
       });
       const stripeSession = await stripeSessionRes.json();
       if (stripeSession.url) {

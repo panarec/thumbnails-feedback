@@ -10,6 +10,9 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from './form
 import { useFormContext } from 'react-hook-form';
 import { MAX_FILE_SIZE } from '@/config/image';
 import { get } from 'http';
+import { fileTypeSchema } from '@/lib/validations/s3';
+import { useS3Upload } from '@/hooks/use-s3-upload';
+import { Loading } from './graphics/Loading';
 
 interface FileWithUrl {
   name: string;
@@ -29,10 +32,10 @@ const FileInput = forwardRef<HTMLInputElement, InputProps>(({ className, ...prop
   const { toast } = useToast();
   const [dragActive, setDragActive] = useState<boolean>(false);
   const [preview, setPreview] = useState<string>();
-  const [selectedFile, setSelectedFile] = useState<File>();
-  const { formState, setValue, control, getFieldState, resetField } = useFormContext();
-
+  const { setValue, control, resetField, watch } = useFormContext();
+  const { s3Upload } = useS3Upload();
   const noInput = !preview;
+  const [loadingImage, setLoadingImage] = useState<boolean>(false);
 
   // handle drag events
   const handleDrag = (e: DragEvent<HTMLFormElement | HTMLDivElement>) => {
@@ -78,9 +81,28 @@ const FileInput = forwardRef<HTMLInputElement, InputProps>(({ className, ...prop
         resetField(`testItems.${props.index}.file`);
         return;
       }
-      setValue(`testItems.${props.index}.file`, e.target.files[0]);
+      const file = e.target.files[0];
 
-      setSelectedFile(e.target.files[0]);
+      try {
+        setLoadingImage(true);
+        const { error, getUrl } = await s3Upload(file);
+        if (getUrl === null) {
+          resetField(`testItems.${props.index}.file`);
+          return;
+        }
+        setPreview(getUrl);
+        setValue(`testItems.${props.index}.file`, getUrl);
+      } catch (error) {
+        console.error(error);
+        toast({
+          title: 'Failed to upload file',
+          description: 'Please try again later.',
+          variant: 'destructive',
+        });
+        resetField(`testItems.${props.index}.file`);
+      } finally {
+        setLoadingImage(false);
+      }
     }
   };
 
@@ -120,33 +142,43 @@ const FileInput = forwardRef<HTMLInputElement, InputProps>(({ className, ...prop
         return;
       }
 
-      if (!e.dataTransfer.files || e.dataTransfer.files.length === 0) {
-        setSelectedFile(undefined);
-        return;
+      const file = e.dataTransfer.files[0];
+      try {
+        setLoadingImage(true);
+        const { error, getUrl } = await s3Upload(file);
+        if (getUrl === null) {
+          resetField(`testItems.${props.index}.file`);
+          return;
+        }
+        setPreview(getUrl);
+        setValue(`testItems.${props.index}.file`, getUrl);
+      } catch (error) {
+        console.error(error);
+        toast({
+          title: 'Failed to upload file',
+          description: 'Please try again later.',
+          variant: 'destructive',
+        });
+        resetField(`testItems.${props.index}.file`);
+      } finally {
+        setLoadingImage(false);
       }
-      setSelectedFile(e.dataTransfer.files[0]);
-      setValue(`testItems.${props.index}.file`, e.dataTransfer.files[0]);
-
       e.dataTransfer.clearData();
     }
   };
 
   // create a preview as a side effect, whenever selected file is changed
   useEffect(() => {
-    if (!selectedFile) {
-      setPreview(undefined);
+    const file = watch(`testItems.${props.index}.file`);
+    if (!file) {
       return;
     }
-    const objectUrl = URL.createObjectURL(selectedFile);
-    setPreview(objectUrl);
-    // free memory when ever this component is unmounted
-    return () => URL.revokeObjectURL(objectUrl);
-  }, [selectedFile, formState]);
+    setPreview(file);
+  }, [watch]);
 
   useEffect(() => {
     if (props.formreseted) {
       setPreview(undefined);
-      setSelectedFile(undefined);
       props.setformreseted && props.setformreseted(false);
     }
   }, [props.formreseted]);
@@ -170,6 +202,13 @@ const FileInput = forwardRef<HTMLInputElement, InputProps>(({ className, ...prop
       >
         {noInput ? (
           <>
+            {loadingImage && (
+              <div className="absolute inset-0 flex items-center justify-center bg-slate-200 bg-opacity-50">
+                <div className="w-10 h-10">
+                  <Loading />
+                </div>
+              </div>
+            )}
             <div
               className="absolute inset-0 cursor-pointer"
               onDragEnter={handleDrag}
@@ -209,6 +248,13 @@ const FileInput = forwardRef<HTMLInputElement, InputProps>(({ className, ...prop
         ) : (
           <AspectRatio ratio={16 / 9} className="w-full h-full">
             {preview && <Image src={preview} alt="thumbnail-preview-image" fill className="rounded-md object-cover" />}
+            {loadingImage && (
+              <div className="absolute inset-0 flex items-center justify-center bg-slate-200 bg-opacity-50">
+                <div className="w-10 h-10">
+                  <Loading />
+                </div>
+              </div>
+            )}
             <div
               className="absolute inset-0 cursor-pointer"
               onDragEnter={handleDrag}

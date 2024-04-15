@@ -12,11 +12,11 @@ import ImageUpload from '../ui/image-upload';
 import { useS3Upload } from '@/hooks/use-s3-upload';
 import Link from 'next/link';
 import { useToast } from '../ui/use-toast';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CreateTestResponse } from '@/app/api/test/route';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '../ui/dialog';
-import { set } from 'date-fns';
 import { UpgradeButton } from '../ui/UpgradeButton';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export const formSchema = z.object({
   testName: z.string().min(3, 'Test name must contain at least 3 character(s)').max(100),
@@ -26,7 +26,6 @@ export const formSchema = z.object({
     z.object({
       id: z.string(),
       videoName: z.string().min(3, 'Video name must contain at least 3 character(s)').max(100),
-      fileName: z.string(),
       file: z.any().refine((files) => !!files, 'Image is required.'),
     })
   ),
@@ -36,13 +35,11 @@ const testItems = [
   {
     id: 'A.',
     videoName: '',
-    fileName: '',
     file: '',
   },
   {
     id: 'B.',
     videoName: '',
-    fileName: '',
     file: '',
   },
 ];
@@ -52,31 +49,43 @@ const NewTestForm = () => {
   const { toast } = useToast();
   const [createTestResponse, setCreateTestResponse] = useState<CreateTestResponse | null>(null);
   const [formreseted, setformreseted] = useState<boolean>(false);
+  const [url, setUrl] = useState<string>('');
   const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const defaultFormValues = searchParams.get('params')
+    ? JSON.parse(searchParams.get('params') || '')
+    : {
+        testName: '',
+        testDuration: 7,
+        videoDescription: '',
+        testItems: testItems,
+      };
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      testName: '',
-      testDuration: 7,
-      videoDescription: '',
-      testItems: testItems,
-    },
+    defaultValues: defaultFormValues,
   });
+
+  const watch = form.watch;
+
+  useEffect(() => {
+    setUrl(window.location.origin + window.location.pathname + window.location.search);
+  }, [window.location.origin, window.location.pathname, window.location.search]);
+
+  useEffect(() => {
+    const params = new URLSearchParams();
+    const subscription = watch((value, { name, type }) => {
+      params.set('params', JSON.stringify(value));
+      router.push(`/new-test?${params.toString()}`);
+      console.log(value);
+    });
+    return () => subscription.unsubscribe();
+  }, [watch]);
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      const filesUploadPromise = data.testItems.map(async (item) => {
-        const { error, getUrl } = await s3Upload(item.file);
-
-        if (error) {
-          throw new Error('Failed to upload file');
-        }
-
-        item.file = getUrl;
-      });
-
-      await Promise.all(filesUploadPromise);
-
       const response = await fetch(`/api/test`, {
         method: 'POST',
         body: JSON.stringify({
@@ -105,9 +114,9 @@ const NewTestForm = () => {
         return;
       }
 
-      const responseData = (await response.json()) as CreateTestResponse;
-      setCreateTestResponse(responseData);
+      setCreateTestResponse(body);
     } catch (error) {
+      console.log(error);
       throw new Error('Failed to create test');
     }
   };
@@ -216,14 +225,16 @@ const NewTestForm = () => {
       </Form>
       <Dialog onOpenChange={setOpenDialog} open={openDialog}>
         <DialogContent>
-          <DialogHeader className='gap-5'>
-            <DialogTitle className="text-5xl after:content-['\01F627'] after:ml-2">Oooops</DialogTitle>
+          <DialogHeader className="gap-5">
+            <DialogTitle className="text-5xl after:content-['\01F97A'] after:ml-2">Oooops</DialogTitle>
             <DialogDescription>
               It looks like you have reached the maximum number of tests for your tier. Please upgrade your account to
               create more tests.
             </DialogDescription>
           </DialogHeader>
-          <UpgradeButton>I don&apos;t want limits anymore!</UpgradeButton>
+          <UpgradeButton successUrl={url} cancelUrl={url}>
+            I don&apos;t want limits anymore!
+          </UpgradeButton>
         </DialogContent>
       </Dialog>
     </>
