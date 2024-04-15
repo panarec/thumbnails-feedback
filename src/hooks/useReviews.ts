@@ -6,7 +6,7 @@ export const useReviews = () => {
   const { data, error, isLoading, mutate } = useSWR(`/api/reviews`, fetcher);
 
   return {
-    reviewsCount: data as Reviews | undefined,
+    reviews: data as Reviews | undefined,
     error,
     isLoading,
     mutate

@@ -4,7 +4,6 @@ import { useTests } from '@/hooks/useTests';
 import { TestItem } from './TestItem';
 import { Button, buttonVariants } from './ui/button';
 import Link from 'next/link';
-import Image from 'next/image';
 
 const TestsList = () => {
   const { tests, error, isLoading, mutate } = useTests();

@@ -157,8 +157,8 @@ const SignUpForm = () => {
             )}
           />
         </div>
-        <Button type="submit" className="w-full">
-          Sign up
+        <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+          {form.formState.isSubmitting ? 'Signing up...' : 'Sign up'}
         </Button>
         <p className="text-center text-sm text-gray-600 mt-2">
           Already have an account?&nbsp;

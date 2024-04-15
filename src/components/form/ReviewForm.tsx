@@ -12,13 +12,11 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { cn, getAlphabetByIndex } from '@/lib/utils';
-import { useReview } from '@/hooks/useReview';
 import { useRouter } from 'next/navigation';
-import { useTestDetail } from '@/hooks/useTest';
 import { use, useEffect, useState } from 'react';
-import { getSession, useSession } from 'next-auth/react';
-import { set } from 'date-fns';
-import { preload, useSWRConfig } from 'swr';
+import { useReviews } from '@/hooks/useReviews';
+import { Reviews } from '@/app/api/reviews/route';
+import { useSWRConfig } from 'swr';
 
 const reviewSchema = z.object({
   votedThumbnailId: z.string().min(1, 'Please pick a thumbnail.'),
@@ -27,22 +25,28 @@ const reviewSchema = z.object({
     .optional(),
 });
 
-export const ReviewForm = ({ testId }: { testId: string }) => {
-  const router = useRouter();
-  const session = getSession();
-  const { test, error, isLoading } = useTestDetail(testId);
-  const { review } = useReview(testId);
-  const [reviewed, setReviewed] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
+export const ReviewForm = () => {
+  const { reviews } = useReviews();
   const { mutate } = useSWRConfig();
-  useEffect(() => {
-    session.then((session) => {
-      const reviewed = test?.thumbnails.some((thumbnail) =>
-        thumbnail.votes.some((vote) => vote.userId === session?.user.id)
-      );
-      setReviewed(reviewed || false);
-    });
-  }, [test, review]);
+  const [currentReview, setCurrentReview] = useState<{
+    id: string;
+    createdAt: Date;
+    expiresAt: Date;
+    video_description: string;
+    user: {
+      id: string;
+      tier: string;
+    };
+    thumbnails: {
+      id: string;
+      thumbnail_url: string;
+      title: string;
+      votes: {
+        createdAt: Date;
+        userId: string;
+      }[];
+    }[];
+  }>();
 
   const form = useForm<z.infer<typeof reviewSchema>>({
     resolver: zodResolver(reviewSchema),
@@ -52,8 +56,14 @@ export const ReviewForm = ({ testId }: { testId: string }) => {
     },
   });
 
+  useEffect(() => {
+    setCurrentReview(reviews?.[0]);
+  }, [reviews]);
+
   const onSubmit = (data: z.infer<typeof reviewSchema>) => {
-    fetch(`/api/review/${testId}`, {
+    const newTests = reviews?.filter((review) => review.id !== currentReview?.id);
+    mutate('/api/reviews', newTests);
+    fetch(`/api/review/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -61,22 +71,12 @@ export const ReviewForm = ({ testId }: { testId: string }) => {
       body: JSON.stringify(data),
     })
       .then(() => {
-        if (review) {
-          router.push(`/review/${review?.id}`);
-        } else {
-          mutate('/api/reviews', undefined);
-          router.push('/review');
-        }
+        mutate('/api/reviews');
       })
-      .catch((error) => console.error(error))
-      .finally(() => setSubmitting(false));
-    setSubmitting(true);
+      .catch((error) => console.error(error));
   };
-  // If the user has already reviewed the test, redirect them to the review page
-  if (reviewed) {
-    router.push('/review');
-  }
-  if (test) {
+
+  if (currentReview) {
     return (
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="mb-10">
@@ -91,7 +91,7 @@ export const ReviewForm = ({ testId }: { testId: string }) => {
                     defaultValue={field.value}
                     className="grid grid-cols-1 sm:grid-cols-2 gap-5"
                   >
-                    {test.thumbnails.map((thumbnail, index) => (
+                    {currentReview.thumbnails.map((thumbnail, index) => (
                       <div key={thumbnail.id} className="flex flex-col gap-3">
                         <FormLabel className="text-3xl mx-auto">{getAlphabetByIndex(index)}</FormLabel>
                         <FormItem className="flex items-center space-x-3 space-y-0">
@@ -162,13 +162,11 @@ export const ReviewForm = ({ testId }: { testId: string }) => {
           <Accordion type="single" collapsible className="col-span-2">
             <AccordionItem value="item-1">
               <AccordionTrigger>Video description</AccordionTrigger>
-              <AccordionContent>{test.video_description}</AccordionContent>
+              <AccordionContent>{currentReview.video_description}</AccordionContent>
             </AccordionItem>
           </Accordion>
           <div className="flex w-full justify-end mt-5">
-            <Button type="submit" disabled={submitting}>
-              {submitting ? 'Loading...' : 'Next'}
-            </Button>
+            <Button type="submit">Next</Button>
           </div>
         </form>
       </Form>

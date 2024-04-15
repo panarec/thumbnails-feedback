@@ -12,7 +12,7 @@ const ReviewPage: FC<ReviewPageProps> = ({ params }) => {
   return (
     <>
       <DashboardTitle customTitle="Review" />
-      <ReviewForm testId={params.testId} />
+      <ReviewForm />
     </>
   );
 };
