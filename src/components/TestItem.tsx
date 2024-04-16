@@ -49,7 +49,9 @@ export const TestItem: FC<TestItemProps> = ({ test, onDelete }) => {
         key={test.id}
         className={`relative w-full h-full bg-white rounded-xl shadow-md transition-all hover:shadow-lg border-2 border-primary  ${
           isActive ? '' : 'opacity-40'
-        }`}
+        }
+        ${isHovered ? 'transform scale-105' : ''}
+        `}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -83,7 +85,7 @@ export const TestItem: FC<TestItemProps> = ({ test, onDelete }) => {
         )}
 
         <CardHeader>
-          <CardTitle>{test.test_name}</CardTitle>
+          <CardTitle className='break-words'>{test.test_name}</CardTitle>
         </CardHeader>
         <CardContent className="pb-3">
           <div className="grid grid-cols-2 gap-2 mb-5">
@@ -143,7 +145,7 @@ export const TestItem: FC<TestItemProps> = ({ test, onDelete }) => {
             href={`/dashboard/${test.id}`}
             className="text-primary flex flex-row justify-center w-full items-center hover:scale-90 transition-all "
           >
-            See test <ArrowRightIcon />
+            See details <ArrowRightIcon />
           </Link>
         </CardFooter>
       </Card>

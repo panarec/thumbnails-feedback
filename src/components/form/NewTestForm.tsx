@@ -19,13 +19,13 @@ import { UpgradeButton } from '../ui/UpgradeButton';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 export const formSchema = z.object({
-  testName: z.string().min(3, 'Test name must contain at least 3 character(s)').max(100),
+  testName: z.string().min(3, 'Test name must contain at least 3 character(s)').max(20, 'Test name must contain at most 20 character(s)'),
   testDuration: z.coerce.number().int().positive(),
-  videoDescription: z.string().max(300).optional(),
+  videoDescription: z.string().max(100, 'Video description must contain at most 100 character(s)').optional(),
   testItems: z.array(
     z.object({
       id: z.string(),
-      videoName: z.string().min(3, 'Video name must contain at least 3 character(s)').max(100),
+      videoName: z.string().min(3, 'Video name must contain at least 3 character(s)').max(50, 'Video name must contain at most 50 character(s)'),
       file: z.any().refine((files) => !!files, 'Image is required.'),
     })
   ),

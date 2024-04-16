@@ -4,6 +4,8 @@ import { useTests } from '@/hooks/useTests';
 import { TestItem } from './TestItem';
 import { Button, buttonVariants } from './ui/button';
 import Link from 'next/link';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
+import { isFuture } from 'date-fns';
 
 const TestsList = () => {
   const { tests, error, isLoading, mutate } = useTests();
@@ -56,11 +58,38 @@ const TestsList = () => {
     );
   } else if (tests?.length) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5 mb-10">
-        {tests.map((item) => (
-          <TestItem key={item.id} test={item} onDelete={handleDeleteItem} />
-        ))}
-      </div>
+      <Tabs defaultValue="All" className="w-full">
+        <TabsList className="bg-slate-100">
+          <TabsTrigger value="All">All</TabsTrigger>
+          <TabsTrigger value="Active">Active</TabsTrigger>
+          <TabsTrigger value="Inactive">Inactive</TabsTrigger>
+        </TabsList>
+        <TabsContent value="All">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
+            {tests.map((item) => (
+              <TestItem key={item.id} test={item} onDelete={handleDeleteItem} />
+            ))}
+          </div>
+        </TabsContent>
+        <TabsContent value="Active">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
+            {tests
+              .filter((item) => isFuture(item.expiresAt))
+              .map((item) => (
+                <TestItem key={item.id} test={item} onDelete={handleDeleteItem} />
+              ))}
+          </div>
+        </TabsContent>
+        <TabsContent value="Inactive">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
+            {tests
+              .filter((item) => !isFuture(item.expiresAt))
+              .map((item) => (
+                <TestItem key={item.id} test={item} onDelete={handleDeleteItem} />
+              ))}
+          </div>
+        </TabsContent>
+      </Tabs>
     );
   } else {
     return (
