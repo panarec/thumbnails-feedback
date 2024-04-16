@@ -3,6 +3,10 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { db } from './db';
 import { compare } from 'bcrypt';
+import { v4 } from 'uuid';
+import { resend } from './resend';
+import VerificationEmailTemplate from '@/components/email-templates/verification-email';
+import { ReactElement } from 'react';
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),
@@ -17,21 +21,56 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
-        username: { label: 'Username', type: 'text', placeholder: 'jsmith' },
+        email: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        if (!credentials?.username || !credentials?.password) {
+        if (!credentials?.email || !credentials?.password) {
           return null;
         }
         const user = await db.user.findUnique({
           where: {
-            username: credentials.username,
+            email: credentials.email,
           },
         });
 
         if (!user) {
-          return null;
+          throw new Error('Email or password is incorrect. Please try again.');
+        }
+
+        if (user.isActivated === false) {
+          const token = await db.activationToken.findFirst({
+            where: {
+              userId: user.id,
+            },
+          });
+
+          if (!token) {
+            throw new Error('User is not activated. Please check your email for the activation link.');
+          }
+
+          const newToken = await db.activationToken.update({
+            where: {
+              userId: user.id,
+              token: token.token,
+            },
+            data: {
+              expiresAt: new Date(Date.now() + 1000 * 60 * 60),
+              token: v4(),
+            },
+          });
+
+          const { data, error } = await resend.emails.send({
+            from: 'Acme <onboarding@resend.dev>',
+            to: user.email,
+            subject: 'Verify your email',
+            react: VerificationEmailTemplate({
+              username: user.username,
+              userId: user.id,
+              token: newToken.token,
+            }) as ReactElement,
+          });
+          throw new Error('User is not activated. Please check your email for the new activation link.');
         }
 
         const passwordMatch = await compare(credentials.password, user.password);

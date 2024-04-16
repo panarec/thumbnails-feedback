@@ -9,7 +9,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { stripe } from '@/lib/stripe';
+import { useToast } from '../ui/use-toast';
 
 const FormSchema = z
   .object({
@@ -47,6 +47,7 @@ const FormSchema = z
 const SignUpForm = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { toast } = useToast();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -93,16 +94,26 @@ const SignUpForm = () => {
       router.push('/sign-in');
     } else {
       const error = await response.json();
-      form.setError(error.body.field, {
-        type: 'server',
-        message: error.body.error,
-      });
+      if (error.body.field) {
+        form.setError(error.body.field, {
+          type: 'server',
+          message: error.body.error,
+        });
+        return;
+      } else {
+        toast({
+          title: 'Error',
+          description: error.body.error || 'An error occurred',
+          variant: 'destructive',
+        });
+        return;
+      }
     }
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full p-10 bg-blue-50 rounded-md">
         <div className="pb-4">
           <FormField
             control={form.control}

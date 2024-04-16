@@ -13,8 +13,8 @@ import { useRouter } from 'next/navigation';
 import { useToast } from '@/components/ui/use-toast';
 
 const FormSchema = z.object({
-  username: z.string().min(2, {
-    message: 'Username must be at least 2 characters.',
+  email: z.string().email({
+    message: 'Please enter a valid email address.',
   }),
   password: z.string().min(6, {
     message: 'Password must be at least 6 characters.',
@@ -27,21 +27,21 @@ const SignInForm = () => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      username: '',
+      email: '',
       password: '',
     },
   });
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     const signedIn = await signIn('credentials', {
-      username: data.username,
+      email: data.email,
       password: data.password,
       redirect: false,
     });
     if (signedIn?.status !== 200) {
       toast({
         title: 'Error',
-        description: 'Username or password is incorrect. Please try again.',
+        description: signedIn?.error || 'An error occurred',
         variant: 'destructive',
       });
     } else {
@@ -52,16 +52,16 @@ const SignInForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full  p-10 bg-blue-50 rounded-md">
         <div className="pb-4">
           <FormField
             control={form.control}
-            name="username"
+            name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Username</FormLabel>
+                <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="Your username" {...field} />
+                  <Input placeholder="Your email" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

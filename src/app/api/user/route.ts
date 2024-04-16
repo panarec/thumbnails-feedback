@@ -2,6 +2,10 @@ import { db } from '@/lib/db';
 import { hash } from 'bcrypt';
 import { z } from 'zod';
 import { NextResponse } from 'next/server';
+import { resend } from '@/lib/resend';
+import { VerificationEmailTemplate } from '@/components/email-templates/verification-email';
+import { ReactElement } from 'react';
+import { v4 } from 'uuid';
 
 const userRegistrationSchema = z.object({
   username: z
@@ -29,10 +33,10 @@ const userRegistrationSchema = z.object({
 });
 
 export const POST = async (req: Request) => {
-  try {
-    const body = await req.json();
-    const { username, email, password } = userRegistrationSchema.parse(body);
+  const body = await req.json();
+  const { username, email, password } = userRegistrationSchema.parse(body);
 
+  try {
     // Check if user already exists
     const existingUser = await db.user.findUnique({
       where: {
@@ -68,11 +72,39 @@ export const POST = async (req: Request) => {
       },
     });
 
-    const { password: _, ...user } = newUser;
+    const activationToken = await db.activationToken.create({
+      data: {
+        userId: newUser.id,
+        expiresAt: new Date(Date.now() + 1000 * 60 * 60), // 1 hour,
+        token: v4(),
+      },
+    });
+
+    const { password: _, id: __, ...user } = newUser;
+
+    const { data, error } = await resend.emails.send({
+      from: 'Acme <onboarding@resend.dev>',
+      to: email,
+      subject: 'Verify your email',
+      react: VerificationEmailTemplate({
+        username: username,
+        userId: newUser.id,
+        token: activationToken.token,
+      }) as ReactElement,
+    });
+
+    if (error) {
+      throw new Error('Failed to send email');
+    }
 
     return NextResponse.json({ user, message: 'User created' }, { status: 201 });
   } catch (error) {
-    console.error(error);
+    console.log(error)
+    await db.user.delete({
+      where: {
+        email: email,
+      },
+    });
     return NextResponse.json({ body: { error: 'Something went wrong' } }, { status: 500 });
   }
 };
