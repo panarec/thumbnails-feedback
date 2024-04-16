@@ -61,7 +61,7 @@ export const authOptions: NextAuthOptions = {
           });
 
           const { data, error } = await resend.emails.send({
-            from: 'Acme <onboarding@resend.dev>',
+            from: 'Thumbnails Feedback <info@thumbnailsfeedback.com>',
             to: user.email,
             subject: 'Verify your email',
             react: VerificationEmailTemplate({

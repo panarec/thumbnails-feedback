@@ -83,7 +83,7 @@ export const POST = async (req: Request) => {
     const { password: _, id: __, ...user } = newUser;
 
     const { data, error } = await resend.emails.send({
-      from: 'Acme <onboarding@resend.dev>',
+      from: 'Thumbnails Feedback <info@thumbnailsfeedback.com>',
       to: email,
       subject: 'Verify your email',
       react: VerificationEmailTemplate({

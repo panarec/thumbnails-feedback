@@ -3,8 +3,8 @@ import { ArrowBigLeft } from 'lucide-react';
 import Link from 'next/link';
 
 export default function TermsPage() {
-  const WEBSITE_NAME = 'Website Name';
-  const WEBSITE_ADDRESS = 'Website Address';
+  const WEBSITE_NAME = 'Thumbnails Feedback';
+  const WEBSITE_ADDRESS = 'https://thumbnailsfeedback.com';
 
   return (
     <div className="p-10">
