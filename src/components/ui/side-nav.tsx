@@ -58,7 +58,9 @@ export const SideNav = ({ session }: { session: any }) => {
               <DropdownMenuItem>Settings</DropdownMenuItem>
             </Link>
 
-            <DropdownMenuItem>Support</DropdownMenuItem>
+            <DropdownMenuItem>
+              <a href="mailto:support@thumbnailsfeedback.com">Support</a>
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={() =>

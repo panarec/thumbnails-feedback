@@ -23,10 +23,13 @@ export const Footer = async () => {
               </Link>
               &nbsp;made this.
             </div>
+            <a href="mailto:support@thumbnailsfeedback.co" className="text-xs">
+              support@thumbnailsfeedback.com
+            </a>
           </div>
           <div className="flex-grow flex flex-wrap md:pl-24 -mb-10 md:mt-0 mt-10 text-center md:text-left">
             <FooterLinksBlock header="Links">
-              <Link href="/contact">Contact</Link>
+              <Link href="mailto:support@thumbnailsfeedback.com">Support</Link>
               <Link href="/#faq">FAQ</Link>
               <Link href="/#pricing">Pricing</Link>
               <Link href="/sign-in">Signin</Link>

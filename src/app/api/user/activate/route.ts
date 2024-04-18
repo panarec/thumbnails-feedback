@@ -1,9 +1,5 @@
-import VerificationEmailTemplate from '@/components/email-templates/verification-email';
 import { db } from '@/lib/db';
-import { resend } from '@/lib/resend';
 import { NextRequest, NextResponse } from 'next/server';
-import { ReactElement } from 'react';
-import { v4 } from 'uuid';
 
 export const POST = async (req: NextRequest) => {
   const searchParams = req.nextUrl.searchParams;

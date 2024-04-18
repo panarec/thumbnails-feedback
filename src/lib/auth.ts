@@ -61,9 +61,13 @@ export const authOptions: NextAuthOptions = {
           });
 
           const { data, error } = await resend.emails.send({
-            from: 'Thumbnails Feedback <info@thumbnailsfeedback.com>',
+            from: 'Thumbnails Feedback <noreply@thumbnailsfeedback.com>',
             to: user.email,
             subject: 'Verify your email',
+            headers: {
+              'X-Entity-Ref-ID': v4(),
+            },
+            
             react: VerificationEmailTemplate({
               username: user.username,
               userId: user.id,

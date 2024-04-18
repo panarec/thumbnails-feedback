@@ -5,7 +5,7 @@ import Link from 'next/link';
 export default function TermsPage() {
   const WEBSITE_NAME = 'Thumbnails Feedback';
   const WEBSITE_ADDRESS = 'https://thumbnailsfeedback.com';
-  const EMAIL = 'Email';
+  const EMAIL = 'support@thumbnailsfeedback.com';
 
   return (
     <div className="p-10">

@@ -15,7 +15,7 @@ export const VerificationEmailTemplate = ({ username, token }: VerificationEmail
     <Preview>Welcome to the Thumbnails Feedback! This is your verification email.</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Img src="../../../public/logo.png" width="170" height="170" alt="Logo" style={logo} />
+        <Img src="/logo.png" width="170" height="170" alt="Logo" style={logo} />
         <Text style={paragraph}>Hi {username},</Text>
         <Text style={paragraph}>
           Welcome to Thumbnails Feedback! Please click the button below to verify your email address.

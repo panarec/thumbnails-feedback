@@ -83,9 +83,12 @@ export const POST = async (req: Request) => {
     const { password: _, id: __, ...user } = newUser;
 
     const { data, error } = await resend.emails.send({
-      from: 'Thumbnails Feedback <info@thumbnailsfeedback.com>',
+      from: 'Thumbnails Feedback <noreply@thumbnailsfeedback.com',
       to: email,
       subject: 'Verify your email',
+      headers: {
+        'X-Entity-Ref-ID': v4(),
+      },
       react: VerificationEmailTemplate({
         username: username,
         userId: newUser.id,
@@ -99,7 +102,7 @@ export const POST = async (req: Request) => {
 
     return NextResponse.json({ user, message: 'User created' }, { status: 201 });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     await db.user.delete({
       where: {
         email: email,
