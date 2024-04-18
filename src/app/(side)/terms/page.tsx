@@ -1,6 +1,11 @@
 import { buttonVariants } from '@/components/ui/button';
 import { ArrowBigLeft } from 'lucide-react';
+import { Metadata } from 'next';
 import Link from 'next/link';
+
+export const metadata: Metadata = {
+  title: 'Terms and Conditions',
+};
 
 export default function TermsPage() {
   const WEBSITE_NAME = 'Thumbnails Feedback';

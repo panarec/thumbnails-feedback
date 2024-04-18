@@ -5,7 +5,10 @@ import '../globals.css';
 const poppins = Poppins({ weight: '700', subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Get feedback before going live',
+  title: {
+    default: 'Thumbnails Feedback',
+    template: '%s | Thumbnails Feedback',
+  },
   description: 'Get feedback before publishing your content and avoid mistakes that could cost you views.',
 };
 
