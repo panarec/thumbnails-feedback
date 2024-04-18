@@ -83,7 +83,7 @@ export const POST = async (req: Request) => {
     const { password: _, id: __, ...user } = newUser;
 
     const { data, error } = await resend.emails.send({
-      from: 'Thumbnails Feedback <noreply@notifications.thumbnailsfeedback.com',
+      from: 'Thumbnails Feedback <noreply@notifications.thumbnailsfeedback.com>',
       to: email,
       subject: 'Verify your email',
       headers: {
@@ -97,6 +97,7 @@ export const POST = async (req: Request) => {
     });
 
     if (error) {
+      console.error(error);
       throw new Error('Failed to send email');
     }
 
