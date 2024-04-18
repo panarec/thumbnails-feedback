@@ -21,7 +21,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 export const formSchema = z.object({
   testName: z.string().min(3, 'Test name must contain at least 3 character(s)').max(20, 'Test name must contain at most 20 character(s)'),
   testDuration: z.coerce.number().int().positive(),
-  videoDescription: z.string().max(100, 'Video description must contain at most 100 character(s)').optional(),
+  videoDescription: z.string().max(300, 'Video description must contain at most 300 character(s)').optional(),
   testItems: z.array(
     z.object({
       id: z.string(),
@@ -45,7 +45,6 @@ const testItems = [
 ];
 
 const NewTestForm = () => {
-  const { s3Upload } = useS3Upload();
   const { toast } = useToast();
   const [createTestResponse, setCreateTestResponse] = useState<CreateTestResponse | null>(null);
   const [formreseted, setformreseted] = useState<boolean>(false);
