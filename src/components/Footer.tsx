@@ -1,6 +1,7 @@
 import { getSiteConfig } from '@/config/site';
 import Link from 'next/link';
 import { FooterLinksBlock } from './FooterLinksBlock';
+import Image from 'next/image';
 
 export const Footer = async () => {
   const siteConfig = await getSiteConfig();
@@ -11,7 +12,7 @@ export const Footer = async () => {
         <div className="flex lg:items-start md:flex-row md:flex-nowrap flex-wrap flex-col">
           <div className="w-80 max-w-full flex-shrink-0 md:mx-0 mx-auto text-center md:text-left">
             <Link href="/" className="flex gap-2 justify-center md:justify-start items-center">
-              <img src="/logo.svg" alt="logo" className="w-8 h-8" />
+              <Image src="/logo.svg" alt="logo" className="w-8 h-8" width={200} height={200} />
               <span className="font-extrabold tracking-tight text-base md:text-lg">{siteConfig.name}</span>
             </Link>
             <p className="mt-3 text-sm text-base-content/80 leading-relaxed">
