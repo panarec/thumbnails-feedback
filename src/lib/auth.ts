@@ -61,7 +61,7 @@ export const authOptions: NextAuthOptions = {
           });
 
           const { data, error } = await resend.emails.send({
-            from: 'Thumbnails Feedback <noreply@thumbnailsfeedback.com>',
+            from: 'Thumbnails Feedback <noreply@notifications.thumbnailsfeedback.com>',
             to: user.email,
             subject: 'Verify your email',
             headers: {
