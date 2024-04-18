@@ -38,7 +38,7 @@ export async function getSiteConfig() {
   const session = await getServerSession(authOptions);
 
   const config = {
-    name: 'Thumbnail Feedbacks',
+    name: 'Thumbnails Feedback',
     description: 'Get feedback before going live',
     links: {},
     socials: {
