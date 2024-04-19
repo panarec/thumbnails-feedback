@@ -38,7 +38,7 @@ export const PricingSection = async () => {
                       <MinusIcon className="w-5 h-5" />
                       <span className="inline">3 Tests</span>
                       <Tooltip>
-                        <TooltipTrigger>
+                        <TooltipTrigger aria-label="more info">
                           <InfoCircledIcon className="w-3 h-3 text-primary" />
                         </TooltipTrigger>
                         <TooltipContent>
@@ -50,7 +50,7 @@ export const PricingSection = async () => {
                       <MinusIcon className="w-5 h-5" />
                       <span>5 Reviews</span>
                       <Tooltip>
-                        <TooltipTrigger>
+                        <TooltipTrigger aria-label="more info">
                           <InfoCircledIcon className="w-3 h-3 text-primary" />
                         </TooltipTrigger>
                         <TooltipContent>
@@ -85,7 +85,7 @@ export const PricingSection = async () => {
                   </div>
                   <div className="flex flex-col justify-end mb-[4px] text-4xl sm:text-5xl">$9.99</div>
                   <div className="flex flex-col justify-center">
-                    <span className="bg-emerald-500 text-white rounded-full px-2 ml-5">Save 80%</span>
+                    <span className="bg-emerald-400 text-slate-700 rounded-full px-3 py-1 ml-5">Save 80%</span>
                   </div>
                   <div>
                     <p className="italic">One time payment</p>

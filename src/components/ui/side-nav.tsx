@@ -29,11 +29,14 @@ export const SideNav = ({ session }: { session: any }) => {
     <SessionProvider>
       <div className="flex items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
         {!isPremium ? (
-          <UpgradeButton successUrl={`${process.env.NEXT_PUBLIC_BASE_URL}/dashboard`} cancelUrl={`${process.env.NEXT_PUBLIC_BASE_URL}/dashboard`}>
+          <UpgradeButton
+            successUrl={`${process.env.NEXT_PUBLIC_BASE_URL}/dashboard`}
+            cancelUrl={`${process.env.NEXT_PUBLIC_BASE_URL}/dashboard`}
+          >
             Upgrade to premium
           </UpgradeButton>
         ) : (
-          <Link href="/dashboard" className="text-orange-400">
+          <Link href="/dashboard" className="text-orange-700 rounded-full">
             Premium member
           </Link>
         )}

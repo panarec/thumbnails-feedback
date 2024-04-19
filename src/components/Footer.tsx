@@ -19,7 +19,7 @@ export const Footer = async () => {
               Copyrigth © {new Date().getFullYear()} - All rights reserved.
             </p>
             <div className="mt-10">
-              <Link href={siteConfig.socials.youtube} className="text-primary">
+              <Link href={siteConfig.socials.youtube} className="text-primary underline">
                 Paul vee
               </Link>
               &nbsp;made this.
