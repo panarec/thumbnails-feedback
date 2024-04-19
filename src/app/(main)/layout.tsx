@@ -5,7 +5,7 @@ import Navbar from '@/components/Navbar';
 import { Toaster } from '@/components/ui/toaster';
 import { Footer } from '@/components/Footer';
 import Scroll from '@/components/Scroll';
-import PlausibleProvider from 'next-plausible'
+import PlausibleProvider from 'next-plausible';
 
 const poppins = Poppins({ weight: '700', subsets: ['latin'] });
 
@@ -25,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <PlausibleProvider domain="thumbnailsfeedback.comgi" />
+        <PlausibleProvider domain="thumbnailsfeedback.com" />
       </head>
       <Scroll /> {/* Scroll to top of page when navigating to a new page */}
       <body
