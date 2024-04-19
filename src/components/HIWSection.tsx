@@ -16,7 +16,7 @@ export const HIWSection = () => {
             muted
             loop
             playsInline
-          ></video>
+          />
           <div className="space-y-6 md:space-y-8 max-w-lg">
             <h2 className="text-3xl md:text-5xl tracking-tight font-black leading-tight md:leading-tight">
               Start in seconds
@@ -67,7 +67,7 @@ export const HIWSection = () => {
             muted
             loop
             playsInline
-          ></video>
+          />
           <div className="space-y-6 md:space-y-8 max-w-lg">
             <h2 className="text-3xl md:text-5xl tracking-tight font-black leading-tight md:leading-tight">
               Analyze results

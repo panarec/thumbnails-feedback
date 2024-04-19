@@ -132,7 +132,7 @@ const NewTestForm = () => {
         </h1>
         <p className="text-lg text-center">You can now add more tests or review existing ones.</p>
         <div className="flex flex-row gap-3">
-          <Button className="mt-5" onClick={() => form.reset()}>
+          <Button name='create' className="mt-5" onClick={() => form.reset()}>
             Create another test
           </Button>
           <Link href="/dashboard">
