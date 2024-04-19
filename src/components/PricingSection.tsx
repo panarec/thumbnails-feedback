@@ -38,7 +38,7 @@ export const PricingSection = async () => {
                       <MinusIcon className="w-5 h-5" />
                       <span className="inline">3 Tests</span>
                       <Tooltip>
-                        <TooltipTrigger aria-label="more info">
+                        <TooltipTrigger aria-label="more info" className="cursor-default">
                           <InfoCircledIcon className="w-3 h-3 text-primary" />
                         </TooltipTrigger>
                         <TooltipContent>
@@ -50,7 +50,7 @@ export const PricingSection = async () => {
                       <MinusIcon className="w-5 h-5" />
                       <span>5 Reviews</span>
                       <Tooltip>
-                        <TooltipTrigger aria-label="more info">
+                        <TooltipTrigger aria-label="more info" className="cursor-default">
                           <InfoCircledIcon className="w-3 h-3 text-primary" />
                         </TooltipTrigger>
                         <TooltipContent>

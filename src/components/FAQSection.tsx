@@ -11,27 +11,36 @@ export const FAQSection = () => {
           </div>
           <Accordion type="single" collapsible className="basis-1/2">
             <AccordionItem value="item-1">
-              <AccordionTrigger>Lorem ipsum</AccordionTrigger>
+              <AccordionTrigger>How do I get feedback?</AccordionTrigger>
               <AccordionContent>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repellat placeat maiores ipsa dignissimos, ad
-                consectetur corporis reprehenderit suscipit error illo praesentium! Atque eligendi totam officiis
-                corrupti, quae veritatis aliquam sit.
+                Thumbnails feedback is a platform that allows you to create tests with your thumbnails and get feedback
+                from the community. You can create a test by uploading your thumbnails and we will share it with rest of
+                the users.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-2">
-              <AccordionTrigger>Lorem ipsum</AccordionTrigger>
+              <AccordionTrigger>Is it free?</AccordionTrigger>
               <AccordionContent>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad repudiandae explicabo odit quisquam
-                architecto aspernatur, deserunt temporibus quod laudantium recusandae sint, aliquid illum dolore
-                suscipit consequatur tenetur, doloremque enim sunt.
+                Yes, it is free to use. You can create an account and start getting feedback on your thumbnails without
+                paying anything.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-3">
-              <AccordionTrigger>Lorem ipsum</AccordionTrigger>
+              <AccordionTrigger>What is the difference between free and premium plans?</AccordionTrigger>
               <AccordionContent>
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolores nemo repudiandae enim ullam minima,
-                sint ipsa accusantium laborum unde animi eum quas, illum, quaerat ab ducimus blanditiis amet repellat
-                totam?
+                The free plan allows you to create 3 tests with 5 reviews each. The premium plan allows you to create
+                unlimited tests with unlimited reviews.
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-4">
+              <AccordionTrigger>Why do I need feedback on my thumbnails?</AccordionTrigger>
+              <AccordionContent>
+                Thumbnails are the first thing viewers see when they come across your video. As a creator, you want to
+                make sure your thumbnails are engaging and attractive to get more views.
+                <br />
+                <br />
+                Feedback from the community can help you improve your thumbnails and increase your chances of getting
+                more views.
               </AccordionContent>
             </AccordionItem>
           </Accordion>
