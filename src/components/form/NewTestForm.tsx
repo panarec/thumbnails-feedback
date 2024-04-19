@@ -18,13 +18,19 @@ import { UpgradeButton } from '../ui/UpgradeButton';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 export const formSchema = z.object({
-  testName: z.string().min(3, 'Test name must contain at least 3 character(s)').max(20, 'Test name must contain at most 20 character(s)'),
+  testName: z
+    .string()
+    .min(3, 'Test name must contain at least 3 character(s)')
+    .max(20, 'Test name must contain at most 20 character(s)'),
   testDuration: z.coerce.number().int().positive(),
   videoDescription: z.string().max(300, 'Video description must contain at most 300 character(s)').optional(),
   testItems: z.array(
     z.object({
       id: z.string(),
-      videoName: z.string().min(3, 'Video name must contain at least 3 character(s)').max(50, 'Video name must contain at most 50 character(s)'),
+      videoName: z
+        .string()
+        .min(3, 'Video name must contain at least 3 character(s)')
+        .max(50, 'Video name must contain at most 50 character(s)'),
       file: z.any().refine((files) => !!files, 'Image is required.'),
     })
   ),
@@ -47,7 +53,6 @@ const NewTestForm = () => {
   const { toast } = useToast();
   const [createTestResponse, setCreateTestResponse] = useState<CreateTestResponse | null>(null);
   const [formreseted, setformreseted] = useState<boolean>(false);
-  const [url, setUrl] = useState<string>('');
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -67,10 +72,6 @@ const NewTestForm = () => {
   });
 
   const watch = form.watch;
-
-  useEffect(() => {
-    setUrl(window.location.origin + window.location.pathname + window.location.search);
-  }, [window.location.origin, window.location.pathname, window.location.search]);
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -230,9 +231,14 @@ const NewTestForm = () => {
               create more tests.
             </DialogDescription>
           </DialogHeader>
-          <UpgradeButton successUrl={url} cancelUrl={url}>
-            I don&apos;t want limits anymore!
-          </UpgradeButton>
+          {window !== undefined && (
+            <UpgradeButton
+              successUrl={window.location.origin + window.location.pathname + window.location.search}
+              cancelUrl={window.location.origin + window.location.pathname + window.location.search}
+            >
+              I don&apos;t want limits anymore!
+            </UpgradeButton>
+          )}
         </DialogContent>
       </Dialog>
     </>

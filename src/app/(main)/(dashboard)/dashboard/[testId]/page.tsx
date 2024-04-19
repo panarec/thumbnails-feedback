@@ -12,6 +12,7 @@ import { DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/c
 import { Dialog } from '@radix-ui/react-dialog';
 import { UpgradeButton } from '@/components/ui/UpgradeButton';
 import { getSession } from 'next-auth/react';
+import { notFound } from 'next/navigation';
 
 interface TestPageProps {
   params: {
@@ -22,7 +23,6 @@ interface TestPageProps {
 const TestPage: FC<TestPageProps> = ({ params }) => {
   const { test, error, isLoading } = useTestDetail(params.testId);
   const [isActive, setIsActive] = useState(false);
-  const [url, setUrl] = useState<string>('');
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const clientSession = getSession();
   const [isPremium, setIsPremium] = useState(false);
@@ -44,10 +44,6 @@ const TestPage: FC<TestPageProps> = ({ params }) => {
     }
   }, [test]);
 
-  useEffect(() => {
-    setUrl(window.location.origin + window.location.pathname + window.location.search);
-  }, [window.location.origin, window.location.pathname, window.location.search]);
-
   if (isLoading)
     return (
       <div className="flex flex-col h-full items-center justify-center">
@@ -58,6 +54,9 @@ const TestPage: FC<TestPageProps> = ({ params }) => {
       </div>
     );
   if (error) {
+    if (error.message === 'Test not found') {
+      notFound();
+    }
     return <div className="flex justify-center items-center">Something went wrong. Please try again later. </div>;
   }
   if (test)
@@ -99,9 +98,14 @@ const TestPage: FC<TestPageProps> = ({ params }) => {
                 remove this limit.
               </DialogDescription>
             </DialogHeader>
-            <UpgradeButton successUrl={url} cancelUrl={url}>
-              I don&apos;t want limits anymore!
-            </UpgradeButton>
+            {window !== undefined && (
+              <UpgradeButton
+                successUrl={window.location.origin + window.location.pathname + window.location.search}
+                cancelUrl={window.location.origin + window.location.pathname + window.location.search}
+              >
+                I don&apos;t want limits anymore!
+              </UpgradeButton>
+            )}
           </DialogContent>
         </Dialog>
       </>

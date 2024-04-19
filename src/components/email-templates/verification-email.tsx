@@ -7,7 +7,7 @@ interface VerificationEmailProps {
   token: string;
 }
 
-const baseUrl = process.env.URL;
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 export const VerificationEmailTemplate = ({ username, token }: VerificationEmailProps) => (
   <Html>

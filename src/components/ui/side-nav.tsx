@@ -25,15 +25,11 @@ export const SideNav = ({ session }: { session: any }) => {
     });
   }, [clientSession]);
 
-  if (typeof window === undefined) return;
   return (
     <SessionProvider>
       <div className="flex items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
         {!isPremium ? (
-          <UpgradeButton
-            successUrl={`${window?.location.origin}/dashboard`}
-            cancelUrl={`${window?.location.origin}/dashboard`}
-          >
+          <UpgradeButton successUrl={`${process.env.NEXT_PUBLIC_BASE_URL}/dashboard`} cancelUrl={`${process.env.NEXT_PUBLIC_BASE_URL}/dashboard`}>
             Upgrade to premium
           </UpgradeButton>
         ) : (

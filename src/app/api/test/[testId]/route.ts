@@ -52,45 +52,53 @@ export async function GET(req: NextRequest, { params: { testId } }: { params: { 
     return NextResponse.redirect('/sign-in');
   }
 
-  const result = await db.test.findFirst({
-    where: {
-      id: testId,
-    },
-    select: {
-      id: true,
-      test_name: true,
-      expiresAt: true,
-      createdAt: true,
-      video_description: true,
-      thumbnails: {
-        select: {
-          id: true,
-          thumbnail_url: true,
-          title: true,
-          votes: {
-            select: {
-              id: true,
-              userId: true,
-            },
-          },
-          comments: {
-            select: {
-              user: {
-                select: {
-                  username: true,
-                },
+  try {
+    const result = await db.test.findFirst({
+      where: {
+        id: testId,
+      },
+      select: {
+        id: true,
+        test_name: true,
+        expiresAt: true,
+        createdAt: true,
+        video_description: true,
+        thumbnails: {
+          select: {
+            id: true,
+            thumbnail_url: true,
+            title: true,
+            votes: {
+              select: {
+                id: true,
+                userId: true,
               },
-              comment: true,
-              createdAt: true,
-              id: true,
+            },
+            comments: {
+              select: {
+                user: {
+                  select: {
+                    username: true,
+                  },
+                },
+                comment: true,
+                createdAt: true,
+                id: true,
+              },
             },
           },
         },
       },
-    },
-  });
+    });
+    if (!result) {
+      return NextResponse.json({ message: 'Test not found' }, { status: 404 });
+    }
 
-  return NextResponse.json(result);
+    return NextResponse.json(result);
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
+  }
 }
 const TestWithIdAndTestName = Prisma.validator<Prisma.TestArgs>()({
   select: {
