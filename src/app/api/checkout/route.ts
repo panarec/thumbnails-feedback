@@ -3,7 +3,6 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export const POST = async (req: NextRequest) => {
   const data = await req.json();
-  console.log(data);
   let session;
   try {
     session = await stripe.checkout.sessions.create({
@@ -11,7 +10,7 @@ export const POST = async (req: NextRequest) => {
       payment_method_types: ['card'],
       line_items: [
         {
-          price: 'price_1P4IQGHln51fyFbEDImsjOJY',
+          price: process.env.PREMIUM_PRICE_ID,
           quantity: 1,
         },
       ],
