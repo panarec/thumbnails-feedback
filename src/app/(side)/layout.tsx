@@ -4,7 +4,7 @@ import '../globals.css';
 
 const poppins = Poppins({ weight: '700', subsets: ['latin'] });
 
-export default function RootLayout({
+export default function SideLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
