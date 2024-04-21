@@ -8,6 +8,7 @@ export const metadata: Metadata = {
     template: '%s | Thumbnails Feedback',
   },
   description: 'Get feedback before publishing your content and avoid mistakes that could cost you views.',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL as string),
 };
 
 export default function RootLayout({
