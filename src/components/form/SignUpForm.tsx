@@ -77,8 +77,8 @@ const SignUpForm = () => {
             body: JSON.stringify({
               plan,
               email: data.email,
-              successUrl: `${window.location.origin}/dashboard`,
-              cancelUrl: `${window.location.origin}/dashboard`,
+              successUrl: `${window.location.origin}/sign-in?email=${data.email}&success=true`,
+              cancelUrl: `${window.location.origin}/sign-up?email=${data.email}&success=true`,
             }),
           });
           const stripeSession = await stripeSessionRes.json();
@@ -91,7 +91,7 @@ const SignUpForm = () => {
 
         return;
       }
-      router.push('/sign-in');
+      router.push(`/sign-in?email=${data.email}&success=true`);
     } else {
       const error = await response.json();
       if (error.body.field) {

@@ -9,8 +9,9 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useToast } from '@/components/ui/use-toast';
+import { useEffect } from 'react';
 
 const FormSchema = z.object({
   email: z.string().email({
@@ -24,6 +25,7 @@ const FormSchema = z.object({
 const SignInForm = () => {
   const router = useRouter();
   const { toast } = useToast();
+  const searchParams = useSearchParams();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -31,6 +33,20 @@ const SignInForm = () => {
       password: '',
     },
   });
+
+  useEffect(() => {
+    if (searchParams.get('email')) {
+      form.setValue('email', searchParams.get('email') as string);
+    }
+    if (searchParams.get('success')) {
+      toast({
+        title: 'Account created successfully.',
+        description:
+          'Please, chceck your email to verify your account. If you did not receive an email, please check your spam folder.',
+        variant: 'success',
+      });
+    }
+  }, []);
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     const signedIn = await signIn('credentials', {
