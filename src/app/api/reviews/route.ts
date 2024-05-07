@@ -25,7 +25,6 @@ export type Reviews = {
 
 export const GET = async (req: NextRequest) => {
   const session = await getServerSession(authOptions);
-
   if (!session?.user) {
     return NextResponse.redirect('/sign-in');
   }
@@ -102,7 +101,6 @@ export const GET = async (req: NextRequest) => {
 
       return votesA - votesB;
     });
-
 
   return NextResponse.json(reviews);
 };

@@ -5,7 +5,7 @@ import { db } from './db';
 import { compare } from 'bcrypt';
 import { v4 } from 'uuid';
 import { resend } from './resend';
-import VerificationEmailTemplate from '@/components/email-templates/verification-email';
+import VerificationEmailTemplate from '../../emails/verification-email';
 import { ReactElement } from 'react';
 
 export const authOptions: NextAuthOptions = {
@@ -67,7 +67,7 @@ export const authOptions: NextAuthOptions = {
             headers: {
               'X-Entity-Ref-ID': v4(),
             },
-            
+
             react: VerificationEmailTemplate({
               username: user.username,
               userId: user.id,

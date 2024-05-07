@@ -1,4 +1,17 @@
-import { Body, Button, Container, Head, Hr, Html, Img, Preview, Section, Text } from '@react-email/components';
+import {
+  Body,
+  Button,
+  Container,
+  Head,
+  Heading,
+  Hr,
+  Html,
+  Img,
+  Link,
+  Preview,
+  Section,
+  Text,
+} from '@react-email/components';
 import * as React from 'react';
 
 interface VerificationEmailProps {
@@ -15,7 +28,7 @@ export const VerificationEmailTemplate = ({ username, token }: VerificationEmail
     <Preview>Welcome to the Thumbnails Feedback! This is your verification email.</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Text style={paragraph}>Hi {username},</Text>
+        <Heading as="h1">👋 Hey {username},</Heading>
         <Text style={paragraph}>
           Welcome to Thumbnails Feedback! Please click the button below to verify your email address.
         </Text>
@@ -30,6 +43,14 @@ export const VerificationEmailTemplate = ({ username, token }: VerificationEmail
           The Thumbnails Feedback Team
         </Text>
         <Hr style={hr} />
+        <Text style={footer}>
+          You received this email because you have an account on Thumbnails Feedback. If you did not create an account,
+          please ignore this email. If you have any questions, please contact us at{' '}
+          <Link href="mailto:support@thumbnailsfeedback.com" style={link}>
+            support@thumbnailsfeedback.com
+          </Link>
+          .
+        </Text>
       </Container>
     </Body>
   </Html>
@@ -80,4 +101,9 @@ const hr = {
 const footer = {
   color: '#8898aa',
   fontSize: '12px',
+};
+
+const link = {
+  color: '#8898aa',
+  textDecoration: 'underline',
 };

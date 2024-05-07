@@ -23,6 +23,7 @@ model User {
   updatedAt DateTime @updatedAt
   tier      String  @default("free")
   isActivated Boolean @default(false)
+  emailSubscription Boolean @default(true)
   comments Comment[]
   tests     Test[]
   votes     Vote[]

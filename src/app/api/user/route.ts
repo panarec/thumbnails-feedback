@@ -3,7 +3,7 @@ import { hash } from 'bcrypt';
 import { z } from 'zod';
 import { NextResponse } from 'next/server';
 import { resend } from '@/lib/resend';
-import { VerificationEmailTemplate } from '@/components/email-templates/verification-email';
+import { VerificationEmailTemplate } from '../../../../emails/verification-email';
 import { ReactElement } from 'react';
 import { v4 } from 'uuid';
 
