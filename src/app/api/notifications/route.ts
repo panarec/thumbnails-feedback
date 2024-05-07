@@ -49,6 +49,7 @@ export async function GET(request: NextRequest) {
     },
     where: {
       emailSubscription: true,
+      isActivated: true,
     },
   });
 
