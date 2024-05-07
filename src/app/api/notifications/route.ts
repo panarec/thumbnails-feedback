@@ -1,10 +1,18 @@
 import { ReviewsNeededEmailTemplate } from '../../../../emails/reviews-needed';
 import { db } from '@/lib/db';
 import { resend } from '@/lib/resend';
+import { NextRequest } from 'next/server';
 import { ReactElement } from 'react';
 import { v4 } from 'uuid';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const authHeader = request.headers.get('authorization');
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return new Response('Unauthorized', {
+      status: 401,
+    });
+  }
+
   const testsCreatedToday = await db.test.findMany({
     where: {
       createdAt: {
