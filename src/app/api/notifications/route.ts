@@ -42,7 +42,16 @@ export async function GET(request: NextRequest) {
     return Response.json([]);
   }
 
+  const allUsers = await db.user.findMany({
+    select: {
+      id: true,
+      tier: true,
+    },
+  });
+
   const testsWithLessThan5votes = testsCreatedYesterday.filter((test) => {
+    const user = allUsers.find((user) => user.id === test.userId);
+    if (user?.tier === 'premium') return true;
     const votes = test.thumbnails.reduce((acc, thumbnail) => {
       return acc + thumbnail.votes.length;
     }, 0);
@@ -50,8 +59,7 @@ export async function GET(request: NextRequest) {
     return votes < 5;
   });
 
-
-  const allUsers = await db.user.findMany({
+  const allUsersWithEmailSub = await db.user.findMany({
     select: {
       id: true,
       email: true,
@@ -63,7 +71,7 @@ export async function GET(request: NextRequest) {
     },
   });
 
-  let usersNotVotedOnAllTests = allUsers.filter((user) => {
+  let usersNotVotedOnAllTests = allUsersWithEmailSub.filter((user) => {
     return !testsWithLessThan5votes.every((test) => {
       return (
         test.thumbnails.some((thumbnail) => {
