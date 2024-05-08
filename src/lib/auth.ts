@@ -80,7 +80,7 @@ export const authOptions: NextAuthOptions = {
         const passwordMatch = await compare(credentials.password, user.password);
 
         if (!passwordMatch) {
-          return null;
+          throw new Error('Email or password is incorrect. Please try again.');
         }
 
         return {

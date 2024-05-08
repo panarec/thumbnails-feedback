@@ -166,7 +166,10 @@ export const ReviewForm = () => {
             </AccordionItem>
           </Accordion>
           <div className="flex w-full justify-end mt-5">
-            <Button type="submit">Next</Button>
+            <div className="flex flex-col justify-center gap-2">
+              <Button type="submit">Next</Button>
+              {reviews && reviews.length > 1 && <div className="font-sans italic">{reviews.length - 1} more left</div>}
+            </div>
           </div>
         </form>
       </Form>
