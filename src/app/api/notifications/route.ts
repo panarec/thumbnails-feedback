@@ -1,6 +1,7 @@
 import { ReviewsNeededEmailTemplate } from '../../../../emails/reviews-needed';
 import { db } from '@/lib/db';
 import { resend } from '@/lib/resend';
+import { sub } from 'date-fns';
 import { NextRequest } from 'next/server';
 import { ReactElement } from 'react';
 import { v4 } from 'uuid';
@@ -13,11 +14,11 @@ export async function GET(request: NextRequest) {
     });
   }
 
-  const testsCreatedToday = await db.test.findMany({
+  const testsCreatedYesterday = await db.test.findMany({
     where: {
       createdAt: {
-        gte: new Date(new Date().setHours(0, 0, 0, 0)),
-        lt: new Date(new Date().setHours(23, 59, 59, 999)),
+        gte: sub(new Date(), { days: 1 }),
+        lt: new Date(),
       },
     },
     select: {
@@ -37,7 +38,7 @@ export async function GET(request: NextRequest) {
     },
   });
 
-  if (testsCreatedToday.length === 0) {
+  if (testsCreatedYesterday.length === 0) {
     return Response.json([]);
   }
 
@@ -54,7 +55,7 @@ export async function GET(request: NextRequest) {
   });
 
   let usersNotVotedOnAllTests = allUsers.filter((user) => {
-    return !testsCreatedToday.every((test) => {
+    return !testsCreatedYesterday.every((test) => {
       return (
         test.thumbnails.some((thumbnail) => {
           return thumbnail.votes.some((vote) => vote.userId === user.id);
@@ -64,7 +65,7 @@ export async function GET(request: NextRequest) {
   });
 
   const usersNotVotedOnAllTestsAndVotesCount = usersNotVotedOnAllTests.map((user) => {
-    const userVotesNeeded = testsCreatedToday.filter((test) => {
+    const userVotesNeeded = testsCreatedYesterday.filter((test) => {
       if (test.userId !== user.id)
         return !test.thumbnails.some((thumbnail) => {
           return thumbnail.votes.some((vote) => vote.userId === user.id);
