@@ -1,13 +1,11 @@
 import { ArrowRightIcon, ChatBubbleIcon, HandIcon, TimerIcon, TrashIcon } from '@radix-ui/react-icons';
 import { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from './ui/card';
-import { FC, use, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { TestWithCommentsIdsAndVotesIds } from '@/app/api/test/all/route';
 import Link from 'next/link';
 import { AspectRatio } from './ui/aspect-ratio';
 import Image from 'next/image';
-import { Button } from './ui/button';
-import { useSWRConfig } from 'swr';
-import { add, differenceInDays, isFuture } from 'date-fns';
+import { differenceInDays, isFuture } from 'date-fns';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
 import {
   AlertDialog,
@@ -20,6 +18,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from './ui/alert-dialog';
+import { getSession } from 'next-auth/react';
+import { UpgradeButton } from './ui/UpgradeButton';
 
 interface TestItemProps {
   test: TestWithCommentsIdsAndVotesIds;
@@ -31,6 +31,14 @@ export const TestItem: FC<TestItemProps> = ({ test, onDelete }) => {
   const [commentsCount, setCommentsCount] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [isActive, setIsActive] = useState(false);
+  const clientSession = getSession();
+  const [isPremium, setIsPremium] = useState(false);
+
+  useEffect(() => {
+    clientSession.then((ses: any) => {
+      setIsPremium(ses?.user.tier === 'premium');
+    });
+  }, [clientSession]);
 
   useEffect(() => {
     if (test) {
@@ -68,24 +76,44 @@ export const TestItem: FC<TestItemProps> = ({ test, onDelete }) => {
               <TooltipContent>Delete</TooltipContent>
             </Tooltip>
 
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete your test and remove your data from our
-                  servers.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>No</AlertDialogCancel>
-                <AlertDialogAction onClick={() => onDelete(test.id)}>Yes</AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
+            {!isPremium ? (
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Upgrade to premium</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    You need to be a premium member to delete a test. Upgrade now to unlock this feature.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>No</AlertDialogCancel>
+                  <UpgradeButton
+                    successUrl={`${process.env.NEXT_PUBLIC_BASE_URL}/dashboard`}
+                    cancelUrl={`${process.env.NEXT_PUBLIC_BASE_URL}/dashboard`}
+                  >
+                    Upgrade to premium
+                  </UpgradeButton>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            ) : (
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete your test and remove your data from our
+                    servers.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>No</AlertDialogCancel>
+                  <AlertDialogAction onClick={() => onDelete(test.id)}>Yes</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            )}
           </AlertDialog>
         )}
 
         <CardHeader>
-          <CardTitle className='break-words'>{test.test_name}</CardTitle>
+          <CardTitle className="break-words">{test.test_name}</CardTitle>
         </CardHeader>
         <CardContent className="pb-3">
           <div className="grid grid-cols-2 gap-2 mb-5">
