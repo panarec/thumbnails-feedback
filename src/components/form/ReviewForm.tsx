@@ -12,16 +12,26 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { cn, getAlphabetByIndex } from '@/lib/utils';
-import { useRouter } from 'next/navigation';
 import { use, useEffect, useState } from 'react';
 import { useReviews } from '@/hooks/useReviews';
-import { Reviews } from '@/app/api/reviews/route';
 import { useSWRConfig } from 'swr';
 
 const reviewSchema = z.object({
   votedThumbnailId: z.string().min(1, 'Please pick a thumbnail.'),
   comments: z
-    .array(z.object({ thumbnailId: z.string().optional(), comment: z.string().optional() }).optional())
+    .array(
+      z
+        .object({
+          thumbnailId: z.string().optional(),
+          comment: z
+            .string()
+            .max(500, {
+              message: 'Comment must be at most 500 characters.',
+            })
+            .optional(),
+        })
+        .optional()
+    )
     .optional(),
 });
 
@@ -61,6 +71,13 @@ export const ReviewForm = () => {
   }, [reviews]);
 
   const onSubmit = (data: z.infer<typeof reviewSchema>) => {
+    // try {
+    //   reviewSchema.parse(data);
+    // } catch (error) {
+    //   console.error(error);
+    //   return;
+    // }
+
     const newTests = reviews?.filter((review) => review.id !== currentReview?.id);
     mutate('/api/reviews', newTests);
     fetch(`/api/review/`, {
