@@ -60,6 +60,9 @@ const SignInForm = () => {
         description: signedIn?.error || 'An error occurred',
         variant: 'destructive',
       });
+      form.setError('email', {
+        message: signedIn?.error || 'An error occurred',
+      });
     } else {
       router.push('/dashboard');
       router.refresh();
@@ -68,7 +71,7 @@ const SignInForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full  p-10 bg-blue-50 rounded-md">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full p-10 bg-blue-50 rounded-md max-w-[350px]">
         <div className="pb-4">
           <FormField
             control={form.control}
@@ -79,7 +82,7 @@ const SignInForm = () => {
                 <FormControl>
                   <Input placeholder="Your email" {...field} />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className='text-wrap' />
               </FormItem>
             )}
           />

@@ -6,7 +6,7 @@ interface LayoutProps {
 
 const Layout: FC<LayoutProps> = ({ children }) => {
   return (
-    <div className='flex items-center justify-center min-h-[calc(100vh-100px)] '>
+    <div className="flex items-center justify-center min-h-[calc(100vh-100px)]">
       <main>{children}</main>
     </div>
   );

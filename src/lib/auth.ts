@@ -46,7 +46,7 @@ export const authOptions: NextAuthOptions = {
           });
 
           if (!token) {
-            throw new Error('User is not activated. Please check your email for the activation link.');
+            throw new Error('Something went wrong. Please try again. If the problem persists, please contact support.');
           }
 
           const newToken = await db.activationToken.update({
@@ -74,7 +74,7 @@ export const authOptions: NextAuthOptions = {
               token: newToken.token,
             }) as ReactElement,
           });
-          throw new Error('User is not activated. Please check your email for the new activation link.');
+          throw new Error('User is not activated. Please check your email for the new activation link. If you did not receive an email, please check your spam folder.');
         }
 
         const passwordMatch = await compare(credentials.password, user.password);
