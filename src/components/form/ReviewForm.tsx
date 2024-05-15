@@ -179,7 +179,9 @@ export const ReviewForm = () => {
           <Accordion type="single" collapsible className="col-span-2">
             <AccordionItem value="item-1">
               <AccordionTrigger>Video description</AccordionTrigger>
-              <AccordionContent>{currentReview.video_description}</AccordionContent>
+              <AccordionContent>
+                {currentReview.video_description ? currentReview.video_description : 'No description'}
+              </AccordionContent>
             </AccordionItem>
           </Accordion>
           <div className="flex w-full justify-end mt-5">

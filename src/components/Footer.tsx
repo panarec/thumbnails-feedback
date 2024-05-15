@@ -35,6 +35,8 @@ export const Footer = async () => {
               <Link href="/#pricing">Pricing</Link>
               <Link href="/sign-in">Signin</Link>
               <Link href="/sign-up">Signup</Link>
+              <Link href="/blog">Blog</Link>
+              <Link href="/leaderboard">Leaderboard</Link>
             </FooterLinksBlock>
             <FooterLinksBlock header="Legal">
               <Link href="/terms">Terms</Link>

@@ -17,6 +17,10 @@ const loggedUserNav: NavItem[] = [
     title: 'Dashboard',
     href: '/dashboard',
   },
+  {
+    title: 'Leaderboard',
+    href: '/leaderboard',
+  },
 ];
 
 const guestNav: NavItem[] = [
@@ -31,6 +35,10 @@ const guestNav: NavItem[] = [
   {
     title: 'FAQ',
     href: '/#faq',
+  },
+  {
+    title: 'Leaderboard',
+    href: '/leaderboard',
   },
 ];
 
