@@ -29,6 +29,7 @@ export const GET = async (req: NextRequest) => {
         },
       },
     ],
+    take: 10,
   });
 
   return NextResponse.json(usersWithMostCommentsAndVotes, { status: 200 });
