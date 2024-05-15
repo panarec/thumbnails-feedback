@@ -25,7 +25,7 @@ export default function Home() {
             </span>
           </TypographyH1>
           <p className="text-lg opacity-80 leading-relaxed">
-            Get feedback before publishing your content and avoid mistakes that could cost you views.
+            Get feedback on your thumbnails and avoid mistakes that could cost you views.
           </p>
           <Link href="/sign-up" className={buttonVariants({ size: 'lg' })}>
             Start getting feedback <RocketIcon className="w-4 h-4 ml-2" />

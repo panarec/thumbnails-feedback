@@ -95,31 +95,31 @@ export async function GET(request: NextRequest) {
       votesNeeded: userVotesNeeded.length,
     };
   });
-
-  const promises = usersNotVotedOnAllTestsAndVotesCount.map(async (user) => {
-    const { data, error } = await resend.emails.send({
-      from: 'Thumbnails Feedback <noreply@notifications.thumbnailsfeedback.com>',
-      to: user.email,
-      subject: 'Need your review on some thumbnails!',
-      headers: {
-        'X-Entity-Ref-ID': v4(),
-      },
-      react: ReviewsNeededEmailTemplate({
-        username: user.username,
-        testCount: user.votesNeeded,
-        userId: user.id,
-      }) as ReactElement,
+  try {
+    const emails = usersNotVotedOnAllTestsAndVotesCount.map((user) => {
+      return {
+        from: 'Thumbnails Feedback <noreply@notifications.thumbnailsfeedback.com>',
+        to: user.email,
+        subject: 'Need your review on some thumbnails!',
+        headers: {
+          'X-Entity-Ref-ID': v4(),
+        },
+        react: ReviewsNeededEmailTemplate({
+          username: user.username,
+          testCount: user.votesNeeded,
+          userId: user.id,
+        }) as ReactElement,
+      };
     });
+
+    const { data, error } = await resend.batch.send(emails);
 
     if (error) {
       console.error(error);
-      throw new Error('Failed to send email');
+      return Response.json({ error: 'Failed to send emails' }, { status: 500 });
     }
-  });
 
-  try {
-    await Promise.all(promises);
-    return Response.json(usersNotVotedOnAllTestsAndVotesCount);
+    return Response.json(data, { status: 200 });
   } catch (error) {
     console.error(error);
     return Response.json({ error: 'Failed to send emails' }, { status: 500 });
