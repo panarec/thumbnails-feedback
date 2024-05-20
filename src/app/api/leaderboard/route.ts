@@ -1,7 +1,7 @@
 import { db } from '@/lib/db';
 import { NextRequest, NextResponse } from 'next/server';
 
-export const GET = async (req: NextRequest) => {
+export const GET = async (req: Request) => {
   const usersWithMostCommentsAndVotes = await db.user.findMany({
     select: {
       comments: true,
