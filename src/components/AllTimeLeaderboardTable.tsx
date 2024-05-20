@@ -9,6 +9,19 @@ export const AllTimeLeaderboardTable = () => {
   const { data, error, isLoading } = useLeaderboard();
   const [dataWithPoints, setDataWithPoints] = useState<any>([]);
 
+  useEffect(() => {
+    if (data) {
+      const newData = data.map((item: any) => {
+        return {
+          ...item,
+          points: item._count.comments * 3 + item._count.votes,
+        };
+      });
+      newData.sort((a: any, b: any) => b.points - a.points);
+      setDataWithPoints(newData);
+    }
+  }, [data]);
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -48,8 +61,8 @@ export const AllTimeLeaderboardTable = () => {
       </TableHeader>
 
       <TableBody>
-        {data &&
-          data?.map((item: any, index: any) => (
+        {dataWithPoints &&
+          dataWithPoints?.map((item: any, index: any) => (
             <TableRow key={item.id}>
               {index === 0 && (
                 <TableCell className="font-medium">
