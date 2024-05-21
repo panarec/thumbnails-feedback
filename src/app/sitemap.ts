@@ -11,5 +11,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     {
       url: `${process.env.NEXT_PUBLIC_BASE_URL}/sign-up`,
     },
+    {
+      url: `${process.env.NEXT_PUBLIC_BASE_URL}/blog`,
+    },
+    {
+      url: `${process.env.NEXT_PUBLIC_BASE_URL}/blog/how-to-choose-the-best-thumbnail-for-maximum-views`,
+    },
+    {
+      url: `${process.env.NEXT_PUBLIC_BASE_URL}/leaderboard`,
+    },
   ];
 }
