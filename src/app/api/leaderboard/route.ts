@@ -9,7 +9,11 @@ export async function GET(req: NextRequest) {
           id: true,
         },
       },
-      votes: true,
+      votes: {
+        select: {
+          id: true,
+        },
+      },
       username: true,
       _count: {
         select: {
