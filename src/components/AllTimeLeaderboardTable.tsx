@@ -2,41 +2,17 @@
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
 import { InfoCircledIcon } from '@radix-ui/react-icons';
-import { useEffect, useState } from 'react';
+import { useLeaderboard } from '@/hooks/useLeaderboard';
 
 export const AllTimeLeaderboardTable = () => {
-  // const { data, error, isLoading } = useLeaderboard();
-
-  // if (isLoading) {
-  //   return <div>Loading...</div>;
-  // }
-
-  // if (error) {
-  //   return <div>Error: {error.message}</div>;
-  // }
-
-  const [data, setData] = useState<any>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    setIsLoading(true);
-    fetch('/api/leaderboard')
-      .then((res) => res.json())
-      .then((data) => {
-        const mapped = data.map((item: any) => {
-          return {
-            ...item,
-            points: item._count.comments * 3 + item._count.votes,
-          };
-        });
-        mapped.sort((a: any, b: any) => b.points - a.points);
-        setData(mapped);
-        setIsLoading(false);
-      });
-  }, []);
+  const { data, error, isLoading } = useLeaderboard();
 
   if (isLoading) {
     return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
   }
 
   return (
@@ -72,7 +48,6 @@ export const AllTimeLeaderboardTable = () => {
       <TableBody>
         {data &&
           data?.map((item: any, index: any) => {
-            console.log('this is data', data);
             return (
               <TableRow key={item.id}>
                 {index === 0 && (

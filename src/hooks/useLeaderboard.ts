@@ -2,9 +2,8 @@ import useSWR from 'swr';
 
 export const useLeaderboard = () => {
   const fetcher = (url: string) => {
-    console.log('fetching');
     return fetch(url, {
-      method: 'GET',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -25,7 +24,6 @@ export const useLeaderboard = () => {
   });
 
   if (newData) newData.sort((a: any, b: any) => b.points - a.points);
-  console.log('newData', newData);
 
   return {
     data: newData as any | undefined,
