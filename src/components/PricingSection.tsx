@@ -14,8 +14,8 @@ export const PricingSection = async () => {
           <div className="flex flex-col text-center w-full mb-20">
             <h2 className="max-w-xl font-bold text-3xl lg:text-5xl tracking-tight mb-8 mx-auto ">Beat the algorithm</h2>
             <div className="opacity-70 max-w-md mx-auto">
-              You have only few impressions that may decide the fate of your video. Publish with confidence of knowing
-              that your thumbnail is the best it can be.
+              You have only a few impressions that may decide the fate of your video. Publish with the confidence of
+              knowing that your thumbnail is the best it can be.
             </div>
           </div>
           <div className="relative flex justify-center flex-col lg:flex-row items-center lg:items-stretch gap-8">

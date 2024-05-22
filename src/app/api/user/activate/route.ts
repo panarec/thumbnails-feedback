@@ -26,7 +26,10 @@ export const POST = async (req: NextRequest) => {
 
     if (activationToken.expiresAt < new Date()) {
       console.error(`Token: ${token} expired`);
-      return NextResponse.json({ error: 'Token expired' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Token expired. To generate new activation email, please sign in' },
+        { status: 400 }
+      );
     }
 
     // Activate user

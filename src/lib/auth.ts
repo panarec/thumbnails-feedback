@@ -49,32 +49,37 @@ export const authOptions: NextAuthOptions = {
             throw new Error('Something went wrong. Please try again. If the problem persists, please contact support.');
           }
 
-          const newToken = await db.activationToken.update({
-            where: {
-              userId: user.id,
-              token: token.token,
-            },
-            data: {
-              expiresAt: new Date(Date.now() + 1000 * 60 * 60),
-              token: v4(),
-            },
-          });
+          if (token.expiresAt < new Date()) {
+            const newToken = await db.activationToken.update({
+              where: {
+                userId: user.id,
+                token: token.token,
+              },
+              data: {
+                expiresAt: new Date(Date.now() + 1000 * 60 * 60),
+                token: v4(),
+              },
+            });
 
-          const { data, error } = await resend.emails.send({
-            from: 'Thumbnails Feedback <noreply@notifications.thumbnailsfeedback.com>',
-            to: user.email,
-            subject: 'Verify your email',
-            headers: {
-              'X-Entity-Ref-ID': v4(),
-            },
+            const { data, error } = await resend.emails.send({
+              from: 'Thumbnails Feedback <noreply@notifications.thumbnailsfeedback.com>',
+              to: user.email,
+              subject: 'Verify your email',
+              headers: {
+                'X-Entity-Ref-ID': v4(),
+              },
 
-            react: VerificationEmailTemplate({
-              username: user.username,
-              userId: user.id,
-              token: newToken.token,
-            }) as ReactElement,
-          });
-          throw new Error('User is not activated. Please check your email for the new activation link. If you did not receive an email, please check your spam folder.');
+              react: VerificationEmailTemplate({
+                username: user.username,
+                userId: user.id,
+                token: newToken.token,
+              }) as ReactElement,
+            });
+          }
+
+          throw new Error(
+            'User is not activated. Please check your email for the activation link. If you did not receive an email, please check your spam folder.'
+          );
         }
 
         const passwordMatch = await compare(credentials.password, user.password);

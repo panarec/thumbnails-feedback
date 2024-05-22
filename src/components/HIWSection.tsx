@@ -22,8 +22,8 @@ export const HIWSection = () => {
               Start in seconds
             </h2>
             <p className="text-base-content-secondary leading-relaxed">
-              In few clicks you can start getting feedback from community. Just create new test with thumbnails for your
-              upcoming video and submit!
+              In a few clicks you can start getting feedback from the community. Just create a new test with thumbnails
+              for your upcoming video and submit!
             </p>
             <Link href="/#pricing" className={buttonVariants()}>
               I&apos;m in!
@@ -38,8 +38,8 @@ export const HIWSection = () => {
               Get or give feedback
             </h2>
             <p className="text-base-content-secondary leading-relaxed">
-              In one word - community. Every creator is also a viewer. Get feedback from other creators and give
-              feedback to others. It&apos;s a win-win situation.
+              In one word: community. Every creator is also a viewer. Get feedback from other creators and give feedback
+              to others. It&apos;s a win-win situation.
             </p>
             <Link href="/#pricing" className={buttonVariants()}>
               Say no more!
@@ -73,8 +73,8 @@ export const HIWSection = () => {
               Analyze results
             </h2>
             <p className="text-base-content-secondary leading-relaxed">
-              Analyze performance of your tests in dashboard. See how many people would click on your video based on
-              thumbnail and title. Improve your work based on feedback.
+              Analyze the performance of your tests in the dashboard. See how many people would click on your video
+              based on the thumbnail and title. Improve your work based on the feedback.
             </p>
             <Link href="/#pricing" className={buttonVariants()}>
               I need this!

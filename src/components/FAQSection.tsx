@@ -13,9 +13,9 @@ export const FAQSection = () => {
             <AccordionItem value="item-1">
               <AccordionTrigger>How do I get feedback?</AccordionTrigger>
               <AccordionContent>
-                Thumbnails feedback is a platform that allows you to create tests with your thumbnails and get feedback
-                from the community. You can create a test by uploading your thumbnails and we will share it with rest of
-                the users.
+                Thumbnails Feedback is a platform that allows you to create tests with your thumbnails and get feedback
+                from the community. You can create a test by uploading your thumbnails, and we will share it with the
+                rest of the users.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-2">
