@@ -1,26 +1,11 @@
 'use client';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useLeaderboard } from '@/hooks/useLeaderboard';
-import { useEffect, useState } from 'react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
 import { InfoCircledIcon } from '@radix-ui/react-icons';
 
 export const AllTimeLeaderboardTable = () => {
   const { data, error, isLoading } = useLeaderboard();
-  const [dataWithPoints, setDataWithPoints] = useState<any>([]);
-
-  useEffect(() => {
-    if (data) {
-      const newData = data.map((item: any) => {
-        return {
-          ...item,
-          points: item._count.comments * 3 + item._count.votes,
-        };
-      });
-      newData.sort((a: any, b: any) => b.points - a.points);
-      setDataWithPoints(newData);
-    }
-  }, [data]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -61,8 +46,8 @@ export const AllTimeLeaderboardTable = () => {
       </TableHeader>
 
       <TableBody>
-        {dataWithPoints &&
-          dataWithPoints?.map((item: any, index: any) => (
+        {data &&
+          data?.map((item: any, index: any) => (
             <TableRow key={item.id}>
               {index === 0 && (
                 <TableCell className="font-medium">
