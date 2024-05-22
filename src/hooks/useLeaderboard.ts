@@ -2,6 +2,7 @@ import useSWR from 'swr';
 
 export const useLeaderboard = () => {
   const fetcher = (url: string) => {
+    console.log('fetching');
     return fetch(url).then((res) => {
       if (res.status === 404) {
         throw new Error('Leaderboard not found');
@@ -19,6 +20,7 @@ export const useLeaderboard = () => {
   });
 
   if (newData) newData.sort((a: any, b: any) => b.points - a.points);
+  console.log('newData', newData);
 
   return {
     data: newData as any | undefined,

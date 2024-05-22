@@ -15,6 +15,7 @@ export const AllTimeLeaderboardTable = () => {
     return <div>Error: {error.message}</div>;
   }
 
+  console.log('data', data);
   return (
     <Table className="m-auto mt-10">
       <TooltipProvider>
@@ -47,30 +48,33 @@ export const AllTimeLeaderboardTable = () => {
 
       <TableBody>
         {data &&
-          data?.map((item: any, index: any) => (
-            <TableRow key={item.id}>
-              {index === 0 && (
-                <TableCell className="font-medium">
-                  <span className="text-3xl">🥇</span>
-                </TableCell>
-              )}
-              {index === 1 && (
-                <TableCell className="font-medium">
-                  <span className="text-3xl">🥈</span>
-                </TableCell>
-              )}
-              {index === 2 && (
-                <TableCell className="font-medium">
-                  <span className="text-3xl">🥉</span>
-                </TableCell>
-              )}
-              {index > 2 && <TableCell className="text-xl pl-6">{index + 1}</TableCell>}
-              <TableCell>{item.username}</TableCell>
-              <TableCell className="text-right">{item._count.comments}</TableCell>
-              <TableCell className="text-right">{item._count.votes}</TableCell>
-              <TableCell className="text-right">{item._count.comments * 3 + item._count.votes}</TableCell>
-            </TableRow>
-          ))}
+          data?.map((item: any, index: any) => {
+            console.log('this is data', data);
+            return (
+              <TableRow key={item.id}>
+                {index === 0 && (
+                  <TableCell className="font-medium">
+                    <span className="text-3xl">🥇</span>
+                  </TableCell>
+                )}
+                {index === 1 && (
+                  <TableCell className="font-medium">
+                    <span className="text-3xl">🥈</span>
+                  </TableCell>
+                )}
+                {index === 2 && (
+                  <TableCell className="font-medium">
+                    <span className="text-3xl">🥉</span>
+                  </TableCell>
+                )}
+                {index > 2 && <TableCell className="text-xl pl-6">{index + 1}</TableCell>}
+                <TableCell>{item.username}</TableCell>
+                <TableCell className="text-right">{item._count.comments}</TableCell>
+                <TableCell className="text-right">{item._count.votes}</TableCell>
+                <TableCell className="text-right">{item._count.comments * 3 + item._count.votes}</TableCell>
+              </TableRow>
+            );
+          })}
       </TableBody>
     </Table>
   );
