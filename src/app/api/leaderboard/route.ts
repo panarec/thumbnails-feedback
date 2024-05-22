@@ -39,7 +39,6 @@ export async function GET(req: NextRequest) {
     ],
     take: 10,
   });
-  console.log('usersWithMostCommentsAndVotes', usersWithMostCommentsAndVotes);
 
   return NextResponse.json(usersWithMostCommentsAndVotes, { status: 200 });
 }

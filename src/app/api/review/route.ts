@@ -22,6 +22,7 @@ export type Review = Prisma.TestGetPayload<typeof Review>;
 
 export async function GET(req: NextRequest) {
   const session = await getServerSession(authOptions);
+  console.log('calling review api');
 
   if (!session?.user) {
     return NextResponse.redirect('/sign-in');
