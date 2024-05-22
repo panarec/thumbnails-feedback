@@ -3,7 +3,12 @@ import useSWR from 'swr';
 export const useLeaderboard = () => {
   const fetcher = (url: string) => {
     console.log('fetching');
-    return fetch(url).then((res) => {
+    return fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then((res) => {
       if (res.status === 404) {
         throw new Error('Leaderboard not found');
       }

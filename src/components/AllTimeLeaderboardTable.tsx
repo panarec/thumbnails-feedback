@@ -1,21 +1,44 @@
 'use client';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { useLeaderboard } from '@/hooks/useLeaderboard';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
 import { InfoCircledIcon } from '@radix-ui/react-icons';
+import { useEffect, useState } from 'react';
 
 export const AllTimeLeaderboardTable = () => {
-  const { data, error, isLoading } = useLeaderboard();
+  // const { data, error, isLoading } = useLeaderboard();
+
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
+
+  // if (error) {
+  //   return <div>Error: {error.message}</div>;
+  // }
+
+  const [data, setData] = useState<any>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setIsLoading(true);
+    fetch('/api/leaderboard')
+      .then((res) => res.json())
+      .then((data) => {
+        const mapped = data.map((item: any) => {
+          return {
+            ...item,
+            points: item._count.comments * 3 + item._count.votes,
+          };
+        });
+        mapped.sort((a: any, b: any) => b.points - a.points);
+        setData(mapped);
+        setIsLoading(false);
+      });
+  }, []);
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
-
-  console.log('data', data);
   return (
     <Table className="m-auto mt-10">
       <TooltipProvider>
