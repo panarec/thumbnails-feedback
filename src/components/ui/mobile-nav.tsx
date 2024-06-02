@@ -1,6 +1,6 @@
 import { Menu, Package2 } from 'lucide-react';
 import { Button } from './button';
-import { Sheet, SheetContent, SheetTrigger } from './sheet';
+import { Sheet, SheetClose, SheetContent, SheetTrigger } from './sheet';
 import Link from 'next/link';
 import { SiteConfig } from '@/config/site';
 import { FC } from 'react';
@@ -26,9 +26,11 @@ export const MobileNav: FC<MobileNavProps> = ({ siteConfig }) => {
             <span className="">{siteConfig?.name}</span>
           </Link>
           {siteConfig?.mainNav?.map((item, index) => (
-            <Link key={index} href={item.href} className="text-muted-foreground hover:text-foreground">
-              {item.title}
-            </Link>
+            <SheetClose key={index} asChild>
+              <Link href={item.href} className="text-muted-foreground hover:text-foreground">
+                {item.title}
+              </Link>
+            </SheetClose>
           ))}
         </nav>
       </SheetContent>
